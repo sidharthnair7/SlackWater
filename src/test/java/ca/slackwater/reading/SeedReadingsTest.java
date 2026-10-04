@@ -28,9 +28,10 @@ class SeedReadingsTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[0].verdict").value("MOVING"))
-                .andExpect(jsonPath("$[0].surfaceSpeedMetresPerSec").isNumber())
+                .andExpect(jsonPath("$[0].clipPath").value("geul/20241010_081717.mp4"))
                 .andExpect(jsonPath("$[0].evidenceAvailable").value(true))
                 .andExpect(jsonPath("$[0].evidencePng").doesNotExist())
+                .andExpect(jsonPath("$[1].surfaceSpeedMetresPerSec").isNumber())
                 .andExpect(jsonPath("$[2].refusal").value("BACKGROUND_MOVING"));
 
         long first = repository.findAllByOrderByCreatedAtDesc().getFirst().getId();

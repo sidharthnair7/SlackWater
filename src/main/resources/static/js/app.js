@@ -1,13 +1,12 @@
 /*
- * SlackWater v1 preview. Renders readings shaped like the API's: real-readings.js (a snapshot of the engine's
- * answers on real flood footage) and samples.js (synthetic test clips).
- * To connect it later: replace REAL with GET /api/readings, and the Measure button's replay with
- * POST /api/readings (the water box is already kept as fractions of the frame, which is what the API takes).
+ * SlackWater's page. Real readings come live from GET /api/readings; if the server isn't reachable (the page opened
+ * as a file), it falls back to real-readings.js, a saved snapshot. samples.js holds the synthetic test clips.
+ * Your own clip is sent with POST /api/readings, then played back with the engine's tracking laid over it.
  */
 (function () {
   "use strict";
 
-  var REAL = window.SLACKWATER_REAL || [];
+  var REAL = (window.SLACKWATER_REAL || []).slice();
   var TESTS = window.SLACKWATER_SAMPLES || [];
   var SAMPLES = REAL.concat(TESTS);
   var DEFAULT_REGION = { x: 0, y: 1 / 3, w: 1, h: 1 / 3 };
@@ -32,11 +31,14 @@
     compass: $("compass"), needle: $("compass-needle"), figureSub: $("figure-sub"),
     reason: $("reason"), note: $("note"), log: $("log"), gates: $("gates"), record: $("record"),
     measureBtn: $("measure-btn"), measureHint: $("measure-hint"), credit: $("credit"),
+    notice: $("notice"), noticeTag: $("notice-tag"), noticeText: $("notice-text"),
+    ownForm: $("own-form"), ownSite: $("own-site"), ownScale: $("own-scale"),
     filters: $("filters"), readingsBody: $("readings-body")
   };
 
   var scene = new window.SlackWaterScene(el.canvas);
-  var state = { sample: null, region: DEFAULT_REGION, boxChanged: false, own: false, filter: "ALL", run: 0 };
+  var state = { sample: null, region: DEFAULT_REGION, boxChanged: false, own: false, file: null, live: false,
+    filter: "ALL", run: 0 };
 
   /* ---------- formatting ---------- */
 
@@ -83,10 +85,72 @@
     img.addEventListener("load", function () { if (reduceMotion) scene.draw(); });
     return img;
   }
-  REAL.forEach(function (s) {
+  function preload(s) {
     s.evidenceImage = loadImage(s.evidence);
     s.overlayImage = loadImage(s.overlay);
-  });
+    return s;
+  }
+  REAL.forEach(preload);
+
+  /* "Geul at Hommerich (NL) · camera view" becomes "Geul · camera view"; uploads use their place or file name. */
+  function shortLabel(r) {
+    var name = r.siteName || r.fileName || ("Reading " + r.id);
+    var parts = name.split(" · ");
+    var label = parts.length > 1 ? parts[0].split(" ")[0] + " · " + parts.slice(1).join(" · ") : name;
+    return label.length > 34 ? label.slice(0, 33) + "…" : label;
+  }
+
+  /* An API reading, turned into what the viewport needs. */
+  function fromApi(r) {
+    var base = "/api/readings/" + r.id;
+    return preload({
+      key: "r" + r.id,
+      label: shortLabel(r),
+      real: true,
+      video: r.clipPath ? "/clips/" + r.clipPath : null,
+      overlay: r.evidenceAvailable ? base + "/overlay.png" : null,
+      evidence: r.evidenceAvailable ? base + "/evidence.png" : null,
+      reading: r
+    });
+  }
+
+  function setNotice(live) {
+    state.live = live;
+    el.notice.classList.toggle("is-live", live);
+    el.noticeTag.textContent = live ? "Live" : "Offline";
+    el.noticeText.textContent = live
+      ? "Connected to engine 0.2.0. Every reading below was measured by the engine running behind this page."
+      : "Showing a saved snapshot of engine 0.2.0's readings. Start the server to measure your own clips.";
+  }
+
+  /*
+   * Swap the snapshot for the live list. Resolves true when the engine answered with readings. Right after the
+   * server starts, it is still measuring the seed clips and the list is empty, so keep the snapshot and ask again.
+   */
+  var liveAttempts = 0;
+  async function loadLive() {
+    try {
+      var res = await fetch("/api/readings", { headers: { Accept: "application/json" } });
+      if (!res.ok) throw new Error("status " + res.status);
+      var list = await res.json();
+      if (!Array.isArray(list)) throw new Error("not a list");
+      if (!list.length && liveAttempts++ < 20) {
+        setNotice(true);
+        el.noticeText.textContent = "Connected. The engine is measuring the Geul clips; they'll appear in a few seconds.";
+        return new Promise(function (resolve) { setTimeout(function () { loadLive().then(resolve); }, 2000); });
+      }
+      REAL = list.map(fromApi);
+      SAMPLES = REAL.concat(TESTS);
+      setNotice(true);
+      renderSampleList();
+      renderFilters();
+      renderReadings();
+      return true;
+    } catch (e) {
+      setNotice(false);
+      return false;
+    }
+  }
 
   /* ---------- gates, derived from a reading exactly as the engine orders them ---------- */
 
@@ -341,17 +405,32 @@
     el.credit.hidden = !sample.real;
     el.showTracking.disabled = !!(sample.real && !sample.video);
     el.showTracking.parentElement.title = el.showTracking.disabled ? "This clip's tracking is drawn on its evidence frame" : "";
+    el.ownForm.hidden = true;
     el.measureBtn.disabled = false;
-    el.measureBtn.textContent = "Measure again";
+    el.measureBtn.textContent = "Replay the measurement";
     el.measureHint.textContent = "";
     updateBoxHud();
+    markSelected(sample.key);
+    if (animate) measure(sample.reading); else renderReading(sample.reading);
+  }
+
+  function markSelected(key) {
     Array.prototype.forEach.call(el.sampleList.querySelectorAll(".sample"), function (b) {
-      var on = b.dataset.key === sample.key;
+      var on = b.dataset.key === key;
       b.setAttribute("aria-checked", on ? "true" : "false");
       b.tabIndex = on ? 0 : -1;
     });
-    if (animate) measure(sample.reading); else renderReading(sample.reading);
   }
+
+  // Clips browsers can't decode (the top-down Geul video is MPEG-4 Part 2) fall back to the evidence frame.
+  el.video.addEventListener("error", function () {
+    var s = state.sample;
+    if (!state.own && s && s.real && s.video && s.evidenceImage) {
+      scene.setMedia({ image: s.evidenceImage });
+      el.hudSource.textContent = "Real footage · evidence frame";
+      el.showTracking.disabled = true;
+    }
+  });
 
   function renderSampleList() {
     el.sampleList.innerHTML = "";
@@ -393,6 +472,8 @@
     state.run++;
     state.own = true;
     state.sample = null;
+    state.file = file;
+    if (el.video.src && el.video.src.indexOf("blob:") === 0) URL.revokeObjectURL(el.video.src);
     el.video.src = URL.createObjectURL(file);
     el.video.play().catch(function () {});
     scene.setVideo(el.video);
@@ -415,19 +496,104 @@
     el.figureUnit.textContent = "";
     el.compass.toggleAttribute("hidden", true);
     el.figureSub.textContent = "";
-    el.reason.textContent = "Drag on the clip to draw the water box around the water only. Leave some bank outside it: the banks are how we check the camera held still.";
-    el.note.textContent = "Measuring your own clips arrives when this page is connected to the engine.";
+    el.reason.textContent = "Drag on the clip to draw the water box over all of the water. Leave some bank outside it: the banks are how we check the camera held still.";
+    el.note.textContent = "When you measure, the clip is uploaded, measured and deleted. Only its fingerprint is kept.";
     el.note.hidden = false;
     renderGates(GATES.map(function (g) { return { name: g.name, value: "—", rule: "", status: "skip" }; }), true);
     el.record.innerHTML = "";
-    el.measureBtn.disabled = true;
-    el.measureBtn.textContent = "Measure";
-    el.measureHint.textContent = "Not connected to the engine in this preview.";
+    el.ownForm.hidden = false;
+    el.measureBtn.disabled = !state.live;
+    el.measureBtn.textContent = "Measure this clip";
+    el.measureHint.textContent = state.live ? "" : "The engine isn't reachable from this page. Start the server and open it at its address.";
   });
 
   el.measureBtn.addEventListener("click", function () {
-    if (state.sample) measure(state.sample.reading);
+    if (state.own) measureOwn();
+    else if (state.sample) measure(state.sample.reading);
   });
+
+  function showProblem(title, message) {
+    el.readout.classList.remove("is-measuring");
+    el.log.hidden = true;
+    el.verdict.textContent = title;
+    el.verdict.className = "verdict is-refused";
+    el.figure.className = "figure is-working";
+    el.figureValue.textContent = "—";
+    el.reason.textContent = message;
+    el.note.hidden = true;
+    renderGates(GATES.map(function (g) { return { name: g.name, value: "—", rule: "", status: "skip" }; }), false);
+  }
+
+  async function measureOwn() {
+    if (!state.file || !state.live) return;
+    var run = ++state.run;
+    var r = state.region;
+    var form = new FormData();
+    form.append("video", state.file);
+    form.append("regionX", r.x.toFixed(4));
+    form.append("regionY", r.y.toFixed(4));
+    form.append("regionWidth", r.w.toFixed(4));
+    form.append("regionHeight", r.h.toFixed(4));
+    var scale = parseFloat(el.ownScale.value);
+    if (scale > 0) form.append("metresPerPixel", String(scale));
+    if (el.ownSite.value.trim()) form.append("siteName", el.ownSite.value.trim());
+
+    el.measureBtn.disabled = true;
+    el.readout.classList.add("is-measuring");
+    el.verdict.textContent = "Measuring";
+    el.verdict.className = "verdict is-working";
+    el.figure.className = "figure is-working";
+    el.figureValue.textContent = "…";
+    el.compass.toggleAttribute("hidden", true);
+    el.figureSub.textContent = "";
+    el.reason.textContent = "";
+    el.note.hidden = true;
+    el.record.innerHTML = "";
+    renderGates(GATES.map(function (g) { return { name: g.name, value: "…", rule: "", status: "skip" }; }), true);
+    el.log.hidden = false;
+    el.log.innerHTML = "";
+    [["Uploading", (state.file.size / 1e6).toFixed(1) + " MB"], ["Measuring", "frames, points, gates"]].forEach(function (l) {
+      var line = document.createElement("div");
+      line.className = "log-line";
+      line.innerHTML = '<span class="log-step"></span><span class="log-value"></span>';
+      line.querySelector(".log-step").textContent = l[0];
+      line.querySelector(".log-value").textContent = l[1];
+      el.log.appendChild(line);
+    });
+
+    var response;
+    try {
+      response = await fetch("/api/readings", { method: "POST", body: form });
+    } catch (e) {
+      if (run === state.run) showProblem("Not measured", "We couldn't reach the engine. Check the server is running, then try again.");
+      el.measureBtn.disabled = false;
+      return;
+    }
+    if (run !== state.run) return;
+    if (!response.ok) {
+      var body = await response.json().catch(function () { return {}; });
+      showProblem("Not measured", body.error || "The engine answered with an error (" + response.status + ").");
+      el.measureBtn.disabled = false;
+      return;
+    }
+
+    var reading = await response.json();
+    var sample = fromApi(reading);
+    sample.video = null; // the upload is deleted after measuring; keep playing the copy in this browser
+    state.sample = sample;
+    scene.setMedia({ video: el.video, overlayImage: sample.overlayImage });
+    el.showTracking.disabled = false;
+    el.hudSource.textContent = "Your clip · measured";
+    el.hudRate.textContent = num(reading.frameRate, 2) + " fps";
+    el.measureBtn.disabled = false;
+    el.measureBtn.textContent = "Measure again";
+
+    await loadLive();
+    REAL = REAL.map(function (s) { return s.key === sample.key ? sample : s; });
+    SAMPLES = REAL.concat(TESTS);
+    markSelected(sample.key);
+    measure(reading);
+  }
 
   el.showTracking.addEventListener("change", function () {
     scene.overlay = el.showTracking.checked;
@@ -475,9 +641,11 @@
     if (box && box.w >= 0.05 && box.h >= 0.05) {
       state.region = box;
       scene.setRegion(box);
-      if (state.sample) {
+      if (state.sample && !state.own) {
         state.boxChanged = true;
-        el.measureHint.textContent = "Box redrawn. This sample's result was measured with its original box; your box is used once the engine is connected.";
+        el.measureHint.textContent = "Box redrawn. This result was measured with its original box. To measure with your own box, use your own clip.";
+      } else if (state.own && state.sample) {
+        el.measureHint.textContent = "Box redrawn. Measure again to use it.";
       }
     }
     updateBoxHud();
@@ -581,6 +749,10 @@
   renderFilters();
   renderReadings();
   chooseSample(SAMPLES[0].key, false);
+  loadLive().then(function (live) {
+    // Show the live top reading, unless the person has already picked a test clip or their own.
+    if (live && !state.own && REAL.length && (!state.sample || state.sample.real)) chooseSample(REAL[0].key, false);
+  });
   showView();
   if (reduceMotion) {
     // Advance once so trails exist, then hold a still frame.

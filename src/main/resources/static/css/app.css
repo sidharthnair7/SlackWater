@@ -1,4 +1,5 @@
-/* Layout: a field instrument. The clip is the instrument's window, the readout is its dial and logbook;
+/* Light only, by design (his call): it reads like a field sheet, and it films well for the demo.
+   Layout: a field instrument. The clip is the instrument's window, the readout is its dial and logbook;
    two columns on a desk, one column in the field (phone). */
 :root {
   --paper: #f1f4f3;
@@ -30,30 +31,6 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0b1113;
-    --panel: #10191c;
-    --ink: #e1e9e9;
-    --muted: #8d9c9e;
-    --rule: #22302f;
-    --water: #55bcd9;
-    --still: #a3c66b;
-    --refused: #e7a746;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #0b1113;
-  --panel: #10191c;
-  --ink: #e1e9e9;
-  --muted: #8d9c9e;
-  --rule: #22302f;
-  --water: #55bcd9;
-  --still: #a3c66b;
-  --refused: #e7a746;
-  color-scheme: dark;
-}
 
 * { box-sizing: border-box; }
 
@@ -317,6 +294,30 @@ main {
   cursor: pointer;
 }
 .own-clip:focus-within { outline: 2px solid var(--water); outline-offset: 2px; }
+
+.own-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+}
+.own-form label { display: grid; gap: 4px; min-width: 0; flex: 1 1 200px; color: var(--muted); }
+.own-form input {
+  padding: 7px 9px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--data);
+  font-size: 0.8125rem;
+}
+.own-form input:focus-visible { outline: 2px solid var(--water); outline-offset: 0; }
+.own-form small { flex-basis: 100%; color: var(--muted); }
+.notice.is-live .notice-tag { color: var(--panel); background: var(--still); border-color: var(--still); }
 
 /* ---------- readout ---------- */
 

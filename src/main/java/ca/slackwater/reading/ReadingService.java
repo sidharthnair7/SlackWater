@@ -31,10 +31,16 @@ public class ReadingService {
      * which is enough to prove which clip a reading came from without storing anyone's video.
      */
     public Reading measure(Path video, String fileName, AnalysisSettings settings, Site site) throws IOException {
+        return measure(video, fileName, null, settings, site);
+    }
+
+    /** @param clipPath where the original stays under clips/, so the page can play it; null for uploads */
+    public Reading measure(Path video, String fileName, String clipPath, AnalysisSettings settings, Site site)
+            throws IOException {
         try {
             String videoSha256 = Fingerprint.ofFile(video);
             AnalysisResult result = analyze(video, settings);
-            Reading reading = Reading.of(result, site, fileName, videoSha256, settings.canonical(),
+            Reading reading = Reading.of(result, site, fileName, clipPath, videoSha256, settings.canonical(),
                     FlowAnalyzer.ENGINE_VERSION);
             return repository.save(reading);
         } finally {

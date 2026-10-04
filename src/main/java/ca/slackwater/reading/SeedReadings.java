@@ -69,7 +69,7 @@ public class SeedReadings implements ApplicationRunner {
             // The service deletes what it measures, so give it a copy.
             Path copy = Files.createTempFile("slackwater-seed-", ".video");
             Files.copy(clip, copy, StandardCopyOption.REPLACE_EXISTING);
-            Reading reading = service.measure(copy, clip.getFileName().toString(),
+            Reading reading = service.measure(copy, clip.getFileName().toString(), row[0].trim(),
                     new AnalysisSettings(region, scale), new Site(row[6].trim(), null, null));
             log.info("Seeded {}: {}", clip.getFileName(), reading.getVerdict());
         } catch (Exception e) {

@@ -12,9 +12,9 @@
 </head>
 <body>
 
-<div class="notice" role="note">
-  <span class="notice-tag">Preview v1</span>
-  Real readings are a snapshot of engine 0.2.0 on the Geul flood video. This page isn't connected to the engine yet.
+<div class="notice" id="notice" role="note">
+  <span class="notice-tag" id="notice-tag">Offline</span>
+  <span id="notice-text">Showing a saved snapshot of engine 0.2.0's readings. Start the server to measure your own clips.</span>
 </div>
 
 <header class="topbar">
@@ -59,6 +59,16 @@
             <span><i class="key key-box"></i>Water box: drag on the clip to redraw</span>
           </div>
           <label class="toggle"><input type="checkbox" id="show-tracking" checked> Show tracking</label>
+        </div>
+
+        <div class="own-form" id="own-form" hidden>
+          <label for="own-site">Place (optional)
+            <input id="own-site" type="text" maxlength="120" placeholder="Jackson Creek, Peterborough" autocomplete="off">
+          </label>
+          <label for="own-scale">Scale in metres per pixel (optional)
+            <input id="own-scale" type="number" min="0" step="any" placeholder="0.01" inputmode="decimal">
+          </label>
+          <small>Only add a scale if the camera looks straight down at the water. Without one you get still or moving, and speed in pixels per second.</small>
         </div>
 
         <fieldset class="samples">

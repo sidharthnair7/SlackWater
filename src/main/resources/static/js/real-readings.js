@@ -1,13 +1,13 @@
 /*
  * Real readings: a snapshot of what engine 0.2.0 returned from GET /api/readings for the Geul flood clips
  * (Zenodo 15002591, CC BY 4.0), with their evidence pictures saved next to the page. Generated from the API's
- * JSON, not typed by hand. Wiring the page to the API replaces this with a live fetch.
+ * JSON, not typed by hand. The page uses it only when the server isn't reachable (opened as a file).
  * The top-down clip is MPEG-4 Part 2, which browsers don't play, so it shows its evidence frame instead.
  */
 window.SLACKWATER_REAL = [
   {
-    "key": "geul-camera",
-    "label": "Geul flood · camera",
+    "key": "r2",
+    "label": "Geul · camera view",
     "real": true,
     "video": "/clips/geul/20241010_081717.mp4",
     "overlay": "img/evidence/geul-2-overlay.png",
@@ -15,7 +15,8 @@ window.SLACKWATER_REAL = [
     "reading": {
       "backgroundTracksMedian": 200.0,
       "cameraUnstableShare": 0.0,
-      "createdAt": "2026-10-04T15:00:56.488740Z",
+      "clipPath": "geul/20241010_081717.mp4",
+      "createdAt": "2026-10-04T16:44:07.224598Z",
       "directionCoherence": 0.9321840215092025,
       "directionDegrees": 33.4965749845494,
       "engineVersion": "0.2.0",
@@ -38,7 +39,7 @@ window.SLACKWATER_REAL = [
       "refusal": null,
       "secondsAnalysed": 3.973333,
       "settings": "region=0.0500,0.3000,0.6800,0.5500;mpp=none;max=15.0",
-      "siteName": "Geul at Hommerich (NL) · original camera view",
+      "siteName": "Geul at Hommerich (NL) · camera view",
       "surfaceSpeedMetresPerSec": null,
       "surfaceSpeedPxPerSec": 185.06507559837877,
       "verdict": "MOVING",
@@ -48,8 +49,8 @@ window.SLACKWATER_REAL = [
     }
   },
   {
-    "key": "geul-topdown",
-    "label": "Geul flood · top-down",
+    "key": "r3",
+    "label": "Geul · top-down at 0.01 m/px",
     "real": true,
     "video": null,
     "overlay": null,
@@ -57,7 +58,8 @@ window.SLACKWATER_REAL = [
     "reading": {
       "backgroundTracksMedian": 200.0,
       "cameraUnstableShare": 0.0,
-      "createdAt": "2026-10-04T15:00:57.758827Z",
+      "clipPath": "geul/20241010_081717_ortho.mp4",
+      "createdAt": "2026-10-04T16:44:08.371873Z",
       "directionCoherence": 0.9745920074251502,
       "directionDegrees": 3.9363407929578216,
       "engineVersion": "0.2.0",
@@ -80,7 +82,7 @@ window.SLACKWATER_REAL = [
       "refusal": null,
       "secondsAnalysed": 3.600036,
       "settings": "region=0.0000,0.1400,1.0000,0.7400;mpp=0.010000;max=15.0",
-      "siteName": "Geul at Hommerich (NL) · top-down view at 0.01 m per pixel",
+      "siteName": "Geul at Hommerich (NL) · top-down at 0.01 m/px",
       "surfaceSpeedMetresPerSec": 1.5893649928494427,
       "surfaceSpeedPxPerSec": 158.93649928494426,
       "verdict": "MOVING",
@@ -90,8 +92,8 @@ window.SLACKWATER_REAL = [
     }
   },
   {
-    "key": "geul-badbox",
-    "label": "Geul flood · box too small",
+    "key": "r1",
+    "label": "Geul · box drawn too small",
     "real": true,
     "video": null,
     "overlay": null,
@@ -99,7 +101,8 @@ window.SLACKWATER_REAL = [
     "reading": {
       "backgroundTracksMedian": 196.0,
       "cameraUnstableShare": 0.0,
-      "createdAt": "2026-10-04T15:00:55.769996Z",
+      "clipPath": "geul/20241010_081717_ortho.mp4",
+      "createdAt": "2026-10-04T16:44:06.527238Z",
       "directionCoherence": null,
       "directionDegrees": null,
       "engineVersion": "0.2.0",
@@ -122,7 +125,7 @@ window.SLACKWATER_REAL = [
       "refusal": "BACKGROUND_MOVING",
       "secondsAnalysed": 3.600036,
       "settings": "region=0.3000,0.2000,0.6800,0.6500;mpp=0.010000;max=15.0",
-      "siteName": "Geul at Hommerich (NL) · top-down view with the box drawn too small",
+      "siteName": "Geul at Hommerich (NL) · box drawn too small",
       "surfaceSpeedMetresPerSec": null,
       "surfaceSpeedPxPerSec": null,
       "verdict": "REFUSED",

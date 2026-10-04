@@ -40,6 +40,8 @@ public class Reading {
     private Double latitude;
     private Double longitude;
     private String fileName;
+    /** Where the clip lives under /clips/, for clips the server keeps (the seeded ones); null for uploads. */
+    private String clipPath;
 
     // The record
     @Column(length = 64)
@@ -95,7 +97,7 @@ public class Reading {
         return evidencePng != null;
     }
 
-    static Reading of(AnalysisResult result, Site site, String fileName, String videoSha256,
+    static Reading of(AnalysisResult result, Site site, String fileName, String clipPath, String videoSha256,
                       String settings, String engineVersion) {
         Reading r = new Reading();
         r.createdAt = Instant.now();
@@ -103,6 +105,7 @@ public class Reading {
         r.latitude = site.latitude();
         r.longitude = site.longitude();
         r.fileName = fileName;
+        r.clipPath = clipPath;
         r.videoSha256 = videoSha256;
         r.settings = settings;
         r.engineVersion = engineVersion;
