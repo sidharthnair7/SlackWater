@@ -94,6 +94,12 @@ public class Reading {
     @JsonIgnore
     private byte[] overlayPng;
 
+    /** Every point the engine followed, as compact JSON for the page's 3D field. Served on its own URL. */
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private byte[] pointsJson;
+
     /** Where this reading is anchored on the OriginTrail DKG, if it is. Looked up by fingerprint, not stored here. */
     @Transient
     private Anchor anchor;
@@ -106,6 +112,16 @@ public class Reading {
     /** The reading in the OneAquaHealth app's own flow vocabulary (FAS / NOR / STA), worked out, not stored. */
     public AppFlowAnswer getAppFlowAnswer() {
         return AppFlowAnswer.of(verdict, surfaceSpeedMetresPerSec);
+    }
+
+    Reading withPoints(byte[] pointsJson) {
+        this.pointsJson = pointsJson;
+        return this;
+    }
+
+    /** Lets the page know whether /api/readings/{id}/points exists. */
+    public boolean isPointsAvailable() {
+        return pointsJson != null;
     }
 
     /** Lets the page know whether /api/readings/{id}/evidence.png and overlay.png exist. */

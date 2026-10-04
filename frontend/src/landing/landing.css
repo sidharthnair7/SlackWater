@@ -354,3 +354,41 @@
 @media (prefers-reduced-motion: reduce) {
   .lp-dot.is-live, .lp-answers span:nth-child(2), .lp-chain::before, .bd-flow path { animation: none; }
 }
+
+/* ---------- every point it followed: the 3D field ---------- */
+.lp-dark { background: #0a1416; color: #e8f1f0; border-block: 1px solid #0a1416; }
+.lp-dark .lp-kicker { color: #4fd3f2; }
+.lp-dark .lp-h2 { color: #f3f8f7; }
+.lp-dark .lp-body { color: #b6c7c6; }
+
+.pf { display: grid; gap: 14px; margin-top: 28px; }
+.pf-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 16px; }
+.pf-group { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 22px; background: rgba(255, 255, 255, 0.04); }
+.pf-group button { font: inherit; font-size: 0.85rem; color: #b6c7c6; background: transparent; border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: background-color 0.2s, color 0.2s; }
+.pf-group button:hover { color: #ffffff; }
+.pf-group button span { font-family: var(--data); font-size: 0.72rem; color: #7f9796; }
+.pf-group button[aria-pressed="true"] { background: #e8f1f0; color: #0a1416; }
+.pf-group button[aria-pressed="true"] span { color: #20807c; }
+.pf-group button:focus-visible { outline: 2px solid #4fd3f2; outline-offset: 2px; }
+
+.pf-stage { position: relative; height: clamp(380px, 52vw, 600px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; overflow: hidden; background: #0a1416; }
+.pf-canvas { position: absolute; inset: 0; }
+.pf-canvas canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+.pf-canvas canvas:active { cursor: grabbing; }
+.pf-labels { position: absolute; top: 0; left: 0; pointer-events: none; }
+.pf-label { font-family: var(--data); font-size: 11px; letter-spacing: 0.03em; color: #9fb4b3; white-space: nowrap; }
+.pf-label.is-cut { color: #4fd3f2; }
+.pf-label.is-warn { color: #ffae45; }
+.pf-label.is-box { color: #f2c33d; }
+.pf-count { position: absolute; left: 16px; top: 14px; margin: 0; font-family: var(--data); font-size: 0.75rem; color: #9fb4b3; pointer-events: none; }
+.pf-count b { font-size: 1rem; color: #ffffff; }
+.pf-loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: #9fb4b3; }
+.pf-legend { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0; padding: 0; list-style: none; font-size: 0.8rem; color: #c7d6d5; pointer-events: none; }
+.pf-legend i { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; vertical-align: -1px; }
+.pf-legend span { margin-left: 6px; font-family: var(--data); font-size: 0.72rem; color: #7f9796; }
+.pf-caption { margin: 0; max-width: 75ch; min-height: 3.2em; line-height: 1.55; color: #b6c7c6; }
+@media (pointer: coarse) { .pf-hint { display: none; } }
+@media (max-width: 560px) { .pf-group { border-radius: 16px; } .pf-group button { padding: 6px 10px; } }
+.pf-foot { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px 24px; }
+.pf-more { flex: none; padding: 9px 16px; border: 1px solid rgba(79, 211, 242, 0.45); border-radius: 999px; color: #4fd3f2; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: background-color 0.2s, color 0.2s; }
+.pf-more:hover { background: #4fd3f2; color: #0a1416; }

@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 880" width="1400" height="880" role="img" aria-label="One SlackWater reading drawn as a knowledge graph">
+<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9db7ba"/></marker><marker id="arrg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2f7a55"/></marker><marker id="arrw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0d6a85"/></marker></defs>
+<rect x="1" y="1" width="1398" height="878" rx="22" fill="#f1f4f3" stroke="#d3dcdb" stroke-width="1.5"/>
+<text x="56" y="64" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" fill="#20807c" text-anchor="start" letter-spacing="2">A READING ON THE ORIGINTRAIL DKG</text>
+<text x="56" y="102" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="32" font-weight="700" fill="#111a1c" text-anchor="start">One flood reading, as a knowledge graph</text>
+<text x="56" y="132" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="15" font-weight="400" fill="#5a6a6d" text-anchor="start">Every value here is real: the Geul flood reading, published to Verifiable Memory on Base Sepolia.</text>
+<rect x="545" y="408" width="310" height="124" rx="16" fill="#111a1c"/>
+<text x="700" y="440" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="500" fill="#86e4ff" text-anchor="middle" letter-spacing="1">sosa:Observation · sw:Reading</text>
+<text x="700" y="475" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">Reading ef2b9453…19b2</text>
+<text x="700" y="504" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="13" font-weight="400" fill="#b8c7c9" text-anchor="middle">the Geul at Hommerich, in flood</text>
+<rect x="545" y="206" width="310" height="92" rx="12" fill="#ffffff" stroke="#20807c" stroke-width="1.6"/>
+<text x="563" y="230" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#20807c" text-anchor="start" letter-spacing="1.4">FINGERPRINT</text>
+<text x="563" y="256" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="600" fill="#111a1c" text-anchor="start">ef2b9453e972b634…b712819b2</text>
+<text x="563" y="278" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">SHA-256 of the clip, the box and the engine</text>
+<line x1="700" y1="408" x2="700" y2="300" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="649.6" y="344" width="100.7" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="700" y="357.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:fingerprint</text>
+<rect x="60" y="294" width="290" height="92" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<text x="78" y="318" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#20807c" text-anchor="start" letter-spacing="1.4">THE CLIP</text>
+<text x="78" y="344" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#111a1c" text-anchor="start">e1bac068…d1c1b370</text>
+<text x="78" y="366" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">Geul flood, Zenodo 15002591, CC BY 4.0</text>
+<path d="M545,470 H540 Q530,470 530,460 V350 Q530,340 520,340 H352" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="390.6" y="330" width="100.7" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="441" y="343.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:videoSha256</text>
+<rect x="60" y="424" width="290" height="92" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<text x="78" y="448" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#20807c" text-anchor="start" letter-spacing="1.4">THE BOX AND SCALE</text>
+<text x="78" y="474" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#111a1c" text-anchor="start">0, 0.14, 1, 0.74 · 0.01 m/px</text>
+<text x="78" y="496" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">where the water is, metres per pixel</text>
+<path d="M545,470 H352" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="399.7" y="460" width="82.5" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="441" y="473.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:settings</text>
+<rect x="60" y="554" width="290" height="92" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<text x="78" y="578" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#20807c" text-anchor="start" letter-spacing="1.4">THE ENGINE</text>
+<text x="78" y="604" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#111a1c" text-anchor="start">SlackWater 0.2.0</text>
+<text x="78" y="626" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">same clip + settings = same answer</text>
+<path d="M545,470 H540 Q530,470 530,480 V590 Q530,600 520,600 H352" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="381.6" y="590" width="118.8" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="441" y="603.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sosa:madeBySensor</text>
+<rect x="1072" y="277" width="272" height="66" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<rect x="1072" y="289" width="4" height="42" rx="2" fill="#0d6a85"/>
+<text x="1090" y="307" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#0d6a85" text-anchor="start">MOVING</text>
+<text x="1090" y="329" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">99% of the points moved together</text>
+<path d="M855,470 H856 Q866,470 866,460 V320 Q866,310 876,310 H1070" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="929.8" y="300" width="76.5" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="968" y="313.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:verdict</text>
+<rect x="1072" y="357" width="272" height="66" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<rect x="1072" y="369" width="4" height="42" rx="2" fill="#0d6a85"/>
+<text x="1090" y="387" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#0d6a85" text-anchor="start">1.5894 m/s</text>
+<text x="1090" y="409" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">surface speed, top-down view</text>
+<path d="M855,470 H856 Q866,470 866,460 V400 Q866,390 876,390 H1070" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="878.3" y="380" width="179.3" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="968" y="393.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:surfaceSpeedMetresPerSec</text>
+<rect x="1072" y="437" width="272" height="66" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<rect x="1072" y="449" width="4" height="42" rx="2" fill="#20807c"/>
+<text x="1090" y="467" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#20807c" text-anchor="start">FAS · Fast</text>
+<text x="1090" y="489" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">the citizen app’s flow answer</text>
+<path d="M855,470 H1070" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="911.6" y="460" width="112.8" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="968" y="473.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:appFlowAnswer</text>
+<rect x="1072" y="517" width="272" height="66" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<rect x="1072" y="529" width="4" height="42" rx="2" fill="#20807c"/>
+<text x="1090" y="547" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#20807c" text-anchor="start">0.9746</text>
+<text x="1090" y="569" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">direction coherence (1 = all agree)</text>
+<path d="M855,470 H856 Q866,470 866,480 V540 Q866,550 876,550 H1070" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="896.5" y="540" width="143.1" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="968" y="553.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sw:directionCoherence</text>
+<rect x="1072" y="597" width="272" height="66" rx="12" fill="#ffffff" stroke="#d3dcdb" stroke-width="1.6"/>
+<rect x="1072" y="609" width="4" height="42" rx="2" fill="#2f7a55"/>
+<text x="1090" y="627" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="17" font-weight="700" fill="#2f7a55" text-anchor="start">#hydrology</text>
+<text x="1090" y="649" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">OneAquaHealth FHIR code</text>
+<path d="M855,470 H856 Q866,470 866,480 V620 Q866,630 876,630 H1070" fill="none" stroke="#9db7ba" stroke-width="1.6" marker-end="url(#arr)"/>
+<rect x="896.5" y="620" width="143.1" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="968" y="633.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#20807c" text-anchor="middle">sosa:observedProperty</text>
+<rect x="500" y="690" width="400" height="96" rx="12" fill="#eaf3ee" stroke="#2f7a55" stroke-width="1.6"/>
+<text x="518" y="714" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#2f7a55" text-anchor="start" letter-spacing="1.4">KNOWLEDGE ASSET · UAL</text>
+<text x="518" y="740" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14.5" font-weight="600" fill="#111a1c" text-anchor="start">did:dkg:base:84532/0x5ea0…9dbe/19</text>
+<text x="518" y="762" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">in context graph #558 (slackwater), on-chain</text>
+<line x1="700" y1="532" x2="700" y2="688" stroke="#2f7a55" stroke-width="2" marker-end="url(#arrg)"/>
+<rect x="655.7" y="602" width="88.6" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="700" y="615.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#2f7a55" text-anchor="middle">published as</text>
+<rect x="1000" y="690" width="340" height="96" rx="12" fill="#ffffff" stroke="#2f7a55" stroke-width="1.6"/>
+<text x="1018" y="714" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#2f7a55" text-anchor="start" letter-spacing="1.4">BASE SEPOLIA TRANSACTION</text>
+<text x="1018" y="740" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="600" fill="#111a1c" text-anchor="start">0x6add93ab…ccb521</text>
+<text x="1018" y="762" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">block 47,685,931 · status: success</text>
+<line x1="900" y1="738" x2="998" y2="738" stroke="#2f7a55" stroke-width="2" marker-end="url(#arrg)"/>
+<rect x="908.7" y="728" width="82.5" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="950" y="741.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#2f7a55" text-anchor="middle">anchored in</text>
+<rect x="60" y="690" width="340" height="96" rx="12" fill="#ffffff" stroke="#0d6a85" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="78" y="714" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10.5" font-weight="600" fill="#0d6a85" text-anchor="start" letter-spacing="1.4">FHIR R4 OBSERVATION</text>
+<text x="78" y="740" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#111a1c" text-anchor="start">observation-indicators-oah</text>
+<text x="78" y="762" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="12" font-weight="400" fill="#5a6a6d" text-anchor="start">carries the same fingerprint and UAL</text>
+<line x1="400" y1="738" x2="498" y2="738" stroke="#0d6a85" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#arrw)"/>
+<rect x="411.8" y="728" width="76.5" height="20" rx="10" fill="#f1f4f3" stroke="#d3dcdb"/>
+<text x="450" y="741.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="10" font-weight="500" fill="#0d6a85" text-anchor="middle">identifier</text>
+<line x1="56" y1="814" x2="1344" y2="814" stroke="#d3dcdb"/>
+<text x="56" y="848" font-family="Segoe UI, Helvetica Neue, Arial, sans-serif" font-size="14" fill="#111a1c"><tspan font-weight="700">Check it yourself.</tspan><tspan fill="#5a6a6d"> Hash the clip, hash that with the box and the engine version, and you get ef2b9453…19b2. Ask the DKG for that fingerprint and this reading comes back.</tspan></text>
+</svg>

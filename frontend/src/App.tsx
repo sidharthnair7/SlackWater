@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Clip, Ledger, Reading, Region } from './types'
 import { SNAPSHOT, TEST_CLIPS } from './data/clips'
 import { clipFromReading, fetchLedger, fetchReadings, measureClip } from './api'
@@ -10,16 +10,22 @@ import { ClipList } from './components/ClipList'
 import { OwnClipForm } from './components/OwnClipForm'
 import { ReadingsView } from './components/ReadingsView'
 import { MethodView } from './components/MethodView'
+import { MeasureStart } from './components/MeasureStart'
 import { Landing } from './landing/Landing'
 
-type View = 'home' | 'measure' | 'readings' | 'method'
+// The 3D field brings three.js with it, so it loads only when someone opens it.
+const FieldView = lazy(() => import('./field/FieldView').then((m) => ({ default: m.FieldView })))
+
+type View = 'home' | 'measure' | 'readings' | 'field' | 'method'
+
+const TAB_LABELS: Record<View, string> = { home: 'Home', measure: 'Measure', readings: 'Readings', field: '3D field', method: 'Method' }
 
 const DEFAULT_REGION: Region = { x: 0, y: 1 / 3, w: 1, h: 1 / 3 }
 const OWN_REGION: Region = { x: 0.1, y: 0.3, w: 0.8, h: 0.5 }
 
 function readView(): View {
   const v = window.location.hash.slice(1)
-  return v === 'measure' || v === 'readings' || v === 'method' ? v : 'home'
+  return v === 'measure' || v === 'readings' || v === 'field' || v === 'method' ? v : 'home'
 }
 
 function regionForClip(c: Clip): Region {
@@ -51,6 +57,12 @@ export function App() {
   const [scale, setScale] = useState('')
   const [busy, setBusy] = useState(false)
   const [ledger, setLedger] = useState<Ledger | null>(null)
+  // Measure opens on the start screen until someone picks a clip, so nobody lands mid-way through a reading.
+  const [started, setStarted] = useState(false)
+  // The top bar folds into a floating capsule once the page scrolls.
+  const [condensed, setCondensed] = useState(false)
+  // The video the 3D field should open on, when it's opened from that video's analysis.
+  const [fieldFocus, setFieldFocus] = useState<string | null>(null)
   const run = useRef(0)
   const pickedByUser = useRef(false)
 
@@ -61,6 +73,14 @@ export function App() {
     const onHash = () => setView(readView())
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  useEffect(() => {
+    // Two thresholds, so the bar doesn't flicker when the page rests right at the edge.
+    const onScroll = () => setCondensed((c) => (c ? window.scrollY > 8 : window.scrollY > 48))
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const show = useCallback((clip: Clip, animate: boolean) => {
@@ -118,11 +138,13 @@ export function App() {
     const clip = clips.find((c) => c.key === key)
     if (!clip) return
     pickedByUser.current = true
+    setStarted(true)
     show(clip, true)
   }
 
   function pickOwn(file: File) {
     pickedByUser.current = true
+    setStarted(true)
     run.current++
     setOwn((prev) => {
       if (prev) URL.revokeObjectURL(prev.url)
@@ -195,6 +217,15 @@ export function App() {
     ? { label: own.result ? 'Measure again' : 'Measure this clip', disabled: !live || busy, onClick: measureOwn }
     : { label: 'Replay the measurement', disabled: readout.kind !== 'reading', onClick: replay }
 
+  // One line above the clip that says where you are and what to do next.
+  const guide = own
+    ? busy
+      ? { step: 3, text: 'Measuring. Uploading the clip, following the points, running the gates.' }
+      : own.result
+        ? { step: 4, text: 'Measured. Redraw the box and measure again, or choose a different clip.' }
+        : { step: 2, text: 'Drag on the video to draw a box over all of the water. Leave some bank outside it, then press Measure this clip.' }
+    : { step: 0, text: 'A real reading, measured by the engine. Press Replay to watch it measure again, or measure your own clip.' }
+
   const notice = live
     ? waiting
       ? "Connected. The engine is measuring the Geul clips; they'll appear in a few seconds."
@@ -210,7 +241,8 @@ export function App() {
         </div>
       )}
 
-      <header className="topbar">
+      <header className={'topbar' + (condensed ? ' is-condensed' : '')}>
+        <div className="topbar-inner">
         <a className="brand" href="#home" aria-label="SlackWater home">
           <svg className="brand-mark" viewBox="0 0 20 24" aria-hidden="true">
             <path d="M4 1v22" />
@@ -220,13 +252,17 @@ export function App() {
           <span className="brand-name">SlackWater</span>
         </a>
         <nav className="tabs" aria-label="Sections">
-          {(['home', 'measure', 'readings', 'method'] as View[]).map((v) => (
-            <a key={v} href={`#${v}`} aria-current={view === v ? 'page' : undefined}>
-              {v[0].toUpperCase() + v.slice(1)}
+          {(['home', 'measure', 'readings', 'field', 'method'] as View[]).map((v) => (
+            <a key={v} href={`#${v}`} aria-current={view === v ? 'page' : undefined} onClick={() => v === 'field' && setFieldFocus(null)}>
+              {TAB_LABELS[v]}
             </a>
           ))}
         </nav>
         <span className="engine-tag">engine <b>0.2.0</b></span>
+        {view !== 'measure' && (
+          <a className="topbar-cta" href="#measure" onClick={() => setStarted(false)}>Measure a clip</a>
+        )}
+        </div>
       </header>
 
       {view === 'home' && (
@@ -238,14 +274,70 @@ export function App() {
             pick(key)
           }}
           onMeasure={() => {
+            setStarted(false)
             window.location.hash = 'measure'
           }}
         />
       )}
 
-      <main hidden={view === 'home'}>
-        {view === 'measure' && (
+      {view === 'field' && (
+        <Suspense fallback={<div className="field-loading">Loading the 3D field…</div>}>
+          <FieldView
+            clips={clips}
+            live={live}
+            focus={fieldFocus}
+            onExit={() => {
+              window.location.hash = fieldFocus ? 'measure' : 'home'
+            }}
+            onOpen={(key) => {
+              window.location.hash = 'measure'
+              pick(key)
+            }}
+          />
+        </Suspense>
+      )}
+
+      <main hidden={view === 'home' || view === 'field'}>
+        {view === 'measure' && !started && (
+          <MeasureStart real={real} tests={TEST_CLIPS} live={live} onPick={pick} onOwnFile={pickOwn} />
+        )}
+        {view === 'measure' && started && (
           <section className="view">
+            <div className="work-head">
+              <button type="button" className="work-back" onClick={() => setStarted(false)}>
+                <span aria-hidden="true">←</span> Choose a different clip
+              </button>
+              {own && <ol className="work-steps" aria-label="Steps">
+                {['Clip', 'Box the water', 'Measure'].map((label, i) => (
+                  <li key={label} className={guide.step === 0 ? '' : i + 1 < guide.step ? 'is-done' : i + 1 === guide.step ? 'is-now' : ''}>
+                    <span>{i + 1}</span>{label}
+                  </li>
+                ))}
+              </ol>}
+              {(own?.result ?? current)?.real && (
+                <a className="work-field" href="#field" onClick={() => setFieldFocus((own?.result ?? current)?.key ?? null)}>
+                  See its points in 3D <span aria-hidden="true">→</span>
+                </a>
+              )}
+              {!own && (
+                <label className="work-own">
+                  <input type="file" accept="video/*" onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) pickOwn(file)
+                    e.target.value = ''
+                  }} />
+                  Measure your own clip
+                </label>
+              )}
+            </div>
+            <div className={'work-guide' + (own ? ' is-own' : '')}>
+              <p>{guide.text}</p>
+              {own && !busy && (
+                <button type="button" className="work-go" disabled={!live} onClick={measureOwn}>
+                  {own.result ? 'Measure again' : 'Measure this clip'} <span aria-hidden="true">→</span>
+                </button>
+              )}
+            </div>
             <div className="measure">
               <div className="stage">
                 <Viewport
@@ -277,7 +369,10 @@ export function App() {
                   </label>
                 </div>
                 {own && <OwnClipForm site={site} scale={scale} onSite={setSite} onScale={setScale} />}
-                <ClipList real={real} tests={TEST_CLIPS} selected={selected || null} onPick={pick} onOwnFile={pickOwn} />
+                <details className="switch-clips">
+                  <summary>Switch to another clip</summary>
+                  <ClipList real={real} tests={TEST_CLIPS} selected={selected || null} onPick={pick} onOwnFile={pickOwn} />
+                </details>
               </div>
               <Readout
                 state={readout}
@@ -304,8 +399,8 @@ export function App() {
         {view === 'method' && <MethodView />}
       </main>
 
-      <footer className="footer" hidden={view === 'home'}>
-        <span>SlackWater · built for the OneAquaHealth hackathon</span>
+      <footer className="footer" hidden={view === 'home' || view === 'field'}>
+        <span>SlackWater · built by Sidharth Nair and Trinidad Laguardia</span>
         <span>Surface velocity only · Thresholds are our stated assumptions</span>
       </footer>
     </>

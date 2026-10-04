@@ -96,6 +96,15 @@ public class ReadingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /** Every point the engine followed for this reading, for the 3D field. */
+    @GetMapping(value = "/{id}/points", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<byte[]> points(@PathVariable("id") long id) {
+        return repository.findById(id)
+                .filter(Reading::isPointsAvailable)
+                .map(reading -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(reading.getPointsJson()))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     /** Only the marks, transparent, the size of the analysed frame: lay it over the clip while it plays. */
     @GetMapping(value = "/{id}/overlay.png", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> overlay(@PathVariable("id") long id) {

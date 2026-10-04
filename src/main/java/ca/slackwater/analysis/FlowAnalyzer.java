@@ -72,8 +72,13 @@ public class FlowAnalyzer {
             new TermCriteria(TermCriteria.COUNT + TermCriteria.EPS, 30, 0.01);
 
     public AnalysisResult analyze(FrameSource source, AnalysisSettings settings) throws Exception {
+        return analyze(source, settings, PointSink.NONE);
+    }
+
+    /** The same measurement, also handing every followed point to {@code points}. The result doesn't change. */
+    public AnalysisResult analyze(FrameSource source, AnalysisSettings settings, PointSink points) throws Exception {
         try (Evidence evidence = new Evidence()) {
-            AnalysisResult result = measure(source, settings, evidence);
+            AnalysisResult result = measure(source, settings, evidence, points);
             Double threshold = result.gates().movingThresholdPxPerSec() == null || result.gates().width() == null
                     ? null
                     : result.gates().movingThresholdPxPerSec() * evidenceScale(result);
@@ -88,7 +93,8 @@ public class FlowAnalyzer {
         return sourceWidth <= VideoFrameSource.ANALYSIS_WIDTH ? 1.0 : (double) VideoFrameSource.ANALYSIS_WIDTH / sourceWidth;
     }
 
-    private AnalysisResult measure(FrameSource source, AnalysisSettings settings, Evidence evidence) throws Exception {
+    private AnalysisResult measure(FrameSource source, AnalysisSettings settings, Evidence evidence, PointSink points)
+            throws Exception {
         GrayFrame first = source.next();
         if (first == null) {
             return AnalysisResult.refused(Refusal.VIDEO_UNREADABLE, GateValues.none());
@@ -145,13 +151,18 @@ public class FlowAnalyzer {
                     pairsUnstable++; // we can't trust this pair, so none of its points count
                 } else {
                     for (float[] t : background) {
-                        backgroundResiduals.add(Math.hypot(t[2] - t[0] - camera[0], t[3] - t[1] - camera[1]) / dt);
+                        double rx = (t[2] - t[0] - camera[0]) / dt;
+                        double ry = (t[3] - t[1] - camera[1]) / dt;
+                        backgroundResiduals.add(Math.hypot(rx, ry));
+                        points.bank(pairsTotal, t[0] / width, t[1] / height, rx * toSourcePixels, ry * toSourcePixels);
                     }
                     for (float[] t : water) {
                         double dx = t[2] - t[0] - camera[0];
                         double dy = t[3] - t[1] - camera[1];
                         waterVelocities.add(new double[]{dx / dt, dy / dt});
                         evidence.addWater(t[0], t[1], dx, dy, Math.hypot(dx, dy) / dt);
+                        points.water(pairsTotal, t[0] / width, t[1] / height, dx / dt * toSourcePixels,
+                                dy / dt * toSourcePixels);
                     }
                 }
                 previous.close();

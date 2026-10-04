@@ -25,7 +25,7 @@ const LINES = Array.from({ length: 8 }, (_, i) => {
 // Fixed points on the banks: stones, roots, a fence post. They never move, which is how the engine knows the
 // phone didn't.
 const BANK_POINTS = [
-  [58, 28], [96, 40], [142, 18], [203, 40], [262, 24], [318, 38], [372, 20],
+  [100, 22], [150, 42], [142, 18], [203, 40], [262, 24], [318, 38], [372, 20],
   [22, 214], [76, 200], [131, 222], [190, 206], [251, 226], [306, 202], [362, 218],
 ]
 

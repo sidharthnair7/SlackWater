@@ -4,6 +4,7 @@ import ca.slackwater.analysis.AnalysisResult;
 import ca.slackwater.analysis.AnalysisSettings;
 import ca.slackwater.analysis.FlowAnalyzer;
 import ca.slackwater.analysis.GateValues;
+import ca.slackwater.analysis.PointCloud;
 import ca.slackwater.analysis.Refusal;
 import ca.slackwater.analysis.VideoFrameSource;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -45,17 +47,21 @@ public class ReadingService {
             throws IOException {
         try {
             String videoSha256 = Fingerprint.ofFile(video);
-            AnalysisResult result = analyze(video, settings);
-            return Reading.of(result, site, fileName, clipPath, videoSha256, settings.canonical(),
+            PointCloud points = new PointCloud();
+            AnalysisResult result = analyze(video, settings, points);
+            Reading reading = Reading.of(result, site, fileName, clipPath, videoSha256, settings.canonical(),
                     FlowAnalyzer.ENGINE_VERSION);
+            String label = site.name() != null && !site.name().isBlank() ? site.name() : fileName;
+            return reading.withPoints(points.json(result, settings.region(), reading.getFingerprint(), label)
+                    .getBytes(StandardCharsets.UTF_8));
         } finally {
             Files.deleteIfExists(video);
         }
     }
 
-    private AnalysisResult analyze(Path video, AnalysisSettings settings) {
+    private AnalysisResult analyze(Path video, AnalysisSettings settings, PointCloud points) {
         try (VideoFrameSource source = new VideoFrameSource(video.toFile())) {
-            return analyzer.analyze(source, settings);
+            return analyzer.analyze(source, settings, points);
         } catch (Exception e) {
             log.warn("Could not read video {}: {}", video, e.getMessage());
             return AnalysisResult.refused(Refusal.VIDEO_UNREADABLE, GateValues.none());

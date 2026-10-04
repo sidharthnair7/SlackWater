@@ -62,6 +62,8 @@ export interface Reading {
   directionCoherence: number | null
   medianWaterSpeedPxPerSec: number | null
   evidenceAvailable?: boolean
+  /** Whether /api/readings/{id}/points has every point the engine followed. */
+  pointsAvailable?: boolean
   appFlowAnswer?: AppFlowAnswer
   anchor?: Anchor | null
 }

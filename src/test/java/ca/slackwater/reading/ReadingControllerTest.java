@@ -64,6 +64,19 @@ class ReadingControllerTest {
     }
 
     @Test
+    void everyReadingServesThePointsItFollowed() throws Exception {
+        String body = upload(clip(), "0.3333").getResponse().getContentAsString();
+        long id = Long.parseLong(body.replaceAll(".*\"id\":(\\d+).*", "$1"));
+
+        mvc.perform(get("/api/readings/" + id + "/points"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.verdict").value("MOVING"))
+                .andExpect(jsonPath("$.followed").isNumber())
+                .andExpect(jsonPath("$.points.length()").value(org.hamcrest.Matchers.greaterThan(0)));
+        assertThat(body).contains("\"pointsAvailable\":true");
+    }
+
+    @Test
     void sameClipAndSettingsGiveTheSameFingerprint() throws Exception {
         MockMultipartFile video = clip();
         String first = upload(video, "0.3333").getResponse().getContentAsString();

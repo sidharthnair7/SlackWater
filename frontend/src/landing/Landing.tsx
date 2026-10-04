@@ -4,6 +4,7 @@ import type { Clip } from '../types'
 import { num, pct, shortHash } from '../lib/format'
 import { BoxDiagram } from './BoxDiagram'
 import { FlowField } from './FlowField'
+import { PointField } from './PointField'
 import { Counter, GateTicker, Reveal } from './Motion'
 import './landing.css'
 
@@ -61,7 +62,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
           <div className="lp-hero-copy">
             <motion.p className="lp-eyebrow" {...rise(0)}>
               <span className={'lp-dot' + (live ? ' is-live' : '')} aria-hidden="true" />
-              OneAquaHealth 2026 · citizen science, measured
+              Citizen science, measured
             </motion.p>
             <motion.h1 className="lp-title" {...rise(0.08)}>
               Turn “it looks slow”
@@ -199,6 +200,22 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
         </div>
       </section>
 
+      {/* ---------- every point it followed ---------- */}
+      <section className="lp-section lp-dark" id="points">
+        <div className="lp-wrap">
+          <Reveal>
+            <p className="lp-kicker">Every point it followed</p>
+            <h2 className="lp-h2">The flood as the engine saw it: 50,698 tracked points.</h2>
+            <p className="lp-body lp-narrow">
+              Each disc is one point the engine followed between two frames: foam and ripples on the water, stones and
+              grass on the banks. Up to 15,000 are drawn per clip. Switch the view to see why it said moving, and why it
+              refused when the box was wrong.
+            </p>
+          </Reveal>
+          <PointField />
+        </div>
+      </section>
+
       {/* ---------- refusing is a result ---------- */}
       <section className="lp-section" id="refusal">
         <div className="lp-wrap">
@@ -312,7 +329,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
             <Reveal className="lp-stat"><p className="lp-stat-n"><Counter value={60} digits={3} /></p><p>px/s measured for a true 60, on a synthetic test strip</p></Reveal>
             <Reveal delay={0.06} className="lp-stat"><p className="lp-stat-n"><Counter value={mps} digits={2} /></p><p>m/s surface speed on a real flood, top-down view</p></Reveal>
             <Reveal delay={0.12} className="lp-stat"><p className="lp-stat-n"><Counter value={7} /></p><p>gates, run in order; the first that fails is the refusal</p></Reveal>
-            <Reveal delay={0.18} className="lp-stat"><p className="lp-stat-n"><Counter value={33} /></p><p>automated tests passing, on synthetic and real footage</p></Reveal>
+            <Reveal delay={0.18} className="lp-stat"><p className="lp-stat-n"><Counter value={34} /></p><p>automated tests passing, on synthetic and real footage</p></Reveal>
           </div>
           <p className="lp-small">Synthetic clips prove the maths. The flood video has no independent reference speed, so 1.59 m/s is the engine’s answer, not a checked one. A score on clips labelled by a person comes next.</p>
         </div>
@@ -352,7 +369,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
       </section>
 
       <footer className="lp-footer lp-wrap">
-        <span>SlackWater · built by Sidharth Nair and Trini for the OneAquaHealth hackathon</span>
+        <span>SlackWater · built by Sidharth Nair and Trinidad Laguardia</span>
         <span>Footage: the Geul at Hommerich, Zenodo 15002591, CC BY 4.0</span>
       </footer>
     </div>
