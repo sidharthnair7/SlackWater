@@ -100,9 +100,10 @@ button, input { font: inherit; color: inherit; }
   transition: padding 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s, border-color 0.3s;
 }
 .topbar-inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: clamp(16px, 4vw, 48px);
+  gap: clamp(12px, 3vw, 32px);
   max-width: 100%;
   margin-inline: auto;
   padding: 12px clamp(16px, 3vw, 32px);
@@ -119,9 +120,9 @@ button, input { font: inherit; color: inherit; }
 }
 .topbar.is-condensed .topbar-inner {
   pointer-events: auto;
-  max-width: 720px;
+  max-width: 880px;
   padding: 6px 6px 6px 18px;
-  gap: 18px;
+  gap: 14px;
   border-color: var(--rule);
   border-radius: 999px;
   background: rgba(251, 252, 251, 0.86);
@@ -130,7 +131,7 @@ button, input { font: inherit; color: inherit; }
   box-shadow: 0 1px 2px rgba(17, 26, 28, 0.06), 0 14px 34px -18px rgba(13, 106, 133, 0.45);
 }
 .topbar.is-condensed .engine-tag { display: none; }
-.topbar.is-condensed .topbar-cta { margin-left: auto; }
+.topbar-end { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
 .topbar.is-condensed .tabs a { border-bottom-color: transparent; border-radius: 999px; }
 .topbar.is-condensed .tabs a[aria-current="page"] { background: color-mix(in srgb, var(--water) 10%, transparent); color: var(--water); }
 .topbar-cta {
@@ -163,8 +164,10 @@ button, input { font: inherit; color: inherit; }
   font-size: var(--step-1);
   letter-spacing: -0.01em;
 }
-.tabs { display: flex; gap: 4px; }
+.tabs { display: flex; gap: 4px; justify-self: center; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tabs a {
+  white-space: nowrap;
   padding: 6px 10px;
   color: var(--muted);
   text-decoration: none;
@@ -174,22 +177,26 @@ button, input { font: inherit; color: inherit; }
 .tabs a:hover { color: var(--ink); }
 .tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
 .engine-tag {
-  margin-left: auto;
   font-family: var(--data);
   font-size: var(--step--1);
   color: var(--muted);
   white-space: nowrap;
 }
 .engine-tag b { color: var(--ink); font-weight: 500; }
-@media (max-width: 640px) {
-  .topbar-inner { flex-wrap: wrap; gap: 6px 12px; padding-block: 10px; }
+@media (max-width: 900px) {
   .engine-tag { display: none; }
-  .topbar-cta { margin-left: auto; padding: 6px 12px; }
-  .tabs { width: 100%; overflow-x: auto; gap: 0; margin-inline: -6px; }
-  .tabs a { padding: 6px 8px; white-space: nowrap; }
-  .topbar.is-condensed .topbar-inner { flex-wrap: nowrap; max-width: calc(100% - 20px); padding: 4px 6px 4px 12px; gap: 6px; }
-  .topbar.is-condensed .brand-name, .topbar.is-condensed .topbar-cta { display: none; }
-  .topbar.is-condensed .tabs { width: auto; margin-inline: 0; }
+}
+@media (max-width: 640px) {
+  .topbar-inner { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand end" "tabs tabs"; gap: 6px 12px; padding-block: 10px; }
+  .brand { grid-area: brand; }
+  .topbar-end { grid-area: end; }
+  .topbar-cta { padding: 6px 12px; }
+  .tabs { grid-area: tabs; justify-self: stretch; overflow-x: auto; gap: 0; margin-inline: -6px; }
+  .tabs a { padding: 6px 8px; }
+  .topbar.is-condensed .topbar-inner { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand tabs"; max-width: calc(100% - 20px); padding: 4px 6px 4px 12px; gap: 6px; }
+  .topbar.is-condensed .brand-name, .topbar.is-condensed .topbar-end { display: none; }
+  .topbar.is-condensed .tabs { margin-inline: 0; }
+  .topbar.is-condensed .tabs a { padding: 5px 7px; font-size: 0.875rem; }
 }
 
 main {

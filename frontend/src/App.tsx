@@ -258,10 +258,12 @@ export function App() {
             </a>
           ))}
         </nav>
-        <span className="engine-tag">engine <b>0.2.0</b></span>
-        {view !== 'measure' && (
-          <a className="topbar-cta" href="#measure" onClick={() => setStarted(false)}>Measure a clip</a>
-        )}
+        <div className="topbar-end">
+          <span className="engine-tag">engine <b>0.2.0</b></span>
+          {view !== 'measure' && (
+            <a className="topbar-cta" href="#measure" onClick={() => setStarted(false)}>Measure a clip</a>
+          )}
+        </div>
         </div>
       </header>
 
