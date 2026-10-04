@@ -1,0 +1,6 @@
+# Real clips measured when the app starts, so the live site always shows real readings.
+# Listed in the order they should appear (first = top of the list). See CREDITS.md for sources and licences.
+# file,regionX,regionY,regionWidth,regionHeight,metresPerPixel,siteName
+geul/20241010_081717_ortho.mp4,0.0,0.14,1.0,0.74,0.01,Geul at Hommerich (NL) · top-down view at 0.01 m per pixel
+geul/20241010_081717.mp4,0.05,0.30,0.68,0.55,,Geul at Hommerich (NL) · original camera view
+geul/20241010_081717_ortho.mp4,0.30,0.20,0.68,0.65,0.01,Geul at Hommerich (NL) · top-down view with the box drawn too small
