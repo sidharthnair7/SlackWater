@@ -91,6 +91,16 @@ public class ReadingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /** The reading as a FHIR R4 Observation in the OneAquaHealth guide's indicator profile (#hydrology). */
+    @GetMapping(value = "/{id}/fhir", produces = {"application/fhir+json", MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String, Object>> fhir(@PathVariable("id") long id) {
+        return repository.findById(id)
+                .map(reading -> ResponseEntity.ok()
+                        .contentType(MediaType.parseMediaType("application/fhir+json"))
+                        .body(FhirObservation.of(reading)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> badRequest(IllegalArgumentException e) {
         return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));

@@ -92,6 +92,11 @@ public class Reading {
     @JsonIgnore
     private byte[] overlayPng;
 
+    /** The reading in the OneAquaHealth app's own flow vocabulary (FAS / NOR / STA), worked out, not stored. */
+    public AppFlowAnswer getAppFlowAnswer() {
+        return AppFlowAnswer.of(verdict, surfaceSpeedMetresPerSec);
+    }
+
     /** Lets the page know whether /api/readings/{id}/evidence.png and overlay.png exist. */
     public boolean isEvidenceAvailable() {
         return evidencePng != null;

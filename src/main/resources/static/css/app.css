@@ -389,6 +389,13 @@ main {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
+.app-answer {
+  margin: 12px 0 0;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+.app-answer b { color: var(--ink); font-weight: 600; }
+.app-answer code { font-family: var(--data); font-size: 0.75rem; padding: 1px 5px; border: 1px solid var(--rule); border-radius: 2px; }
 .reason { margin: 16px 0 0; font-size: var(--step-1); line-height: 1.45; max-width: 46ch; }
 .note {
   margin: 10px 0 0;
@@ -486,6 +493,7 @@ main {
   cursor: pointer;
 }
 .copy:hover { border-color: var(--ink); }
+.record a { color: var(--water); font-size: 0.75rem; }
 .record-note { grid-column: 1 / -1; margin: 4px 0 0; font-size: 0.75rem; color: var(--muted); }
 
 .measure-btn {

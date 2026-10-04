@@ -30,6 +30,7 @@
     figure: $("figure"), figureValue: $("figure-value"), figureUnit: $("figure-unit"),
     compass: $("compass"), needle: $("compass-needle"), figureSub: $("figure-sub"),
     reason: $("reason"), note: $("note"), log: $("log"), gates: $("gates"), record: $("record"),
+    appAnswer: $("app-answer"),
     measureBtn: $("measure-btn"), measureHint: $("measure-hint"), credit: $("credit"),
     notice: $("notice"), noticeTag: $("notice-tag"), noticeText: $("notice-text"),
     ownForm: $("own-form"), ownSite: $("own-site"), ownScale: $("own-scale"),
@@ -231,6 +232,19 @@
       el.record.appendChild(dt);
       el.record.appendChild(dd);
     });
+    if (state.live && state.sample && state.sample.real && r.id != null) {
+      var dt2 = document.createElement("dt");
+      dt2.textContent = "FHIR";
+      var dd2 = document.createElement("dd");
+      var link = document.createElement("a");
+      link.href = "/api/readings/" + r.id + "/fhir";
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = "Observation, OneAquaHealth #hydrology profile";
+      dd2.appendChild(link);
+      el.record.appendChild(dt2);
+      el.record.appendChild(dd2);
+    }
     var note = document.createElement("p");
     note.className = "record-note";
     note.textContent = state.sample && state.sample.real
@@ -273,12 +287,48 @@
     }
   }
 
+  /* The reading in the OneAquaHealth app's own words. The server works it out; synthetic samples get the same rule. */
+  function appAnswerOf(r) {
+    if (r.appFlowAnswer) return r.appFlowAnswer;
+    if (r.verdict === "STILL") return { code: "STA", label: "Stagnant/intermittent" };
+    if (r.verdict === "MOVING" && r.surfaceSpeedMetresPerSec != null) {
+      return r.surfaceSpeedMetresPerSec >= 0.5 ? { code: "FAS", label: "Fast (with waves or high velocity)" } : { code: "NOR", label: "Slow" };
+    }
+    return { code: null, why: r.verdict === "MOVING" ? "Moving, but without a scale we can't tell Slow from Fast." : "Refused, so no answer." };
+  }
+
+  function renderAppAnswer(r) {
+    var a = appAnswerOf(r);
+    el.appAnswer.innerHTML = "";
+    var lead = document.createElement("span");
+    lead.textContent = "In the OneAquaHealth app's words: ";
+    el.appAnswer.appendChild(lead);
+    if (a.code) {
+      var b = document.createElement("b");
+      b.textContent = a.label + " ";
+      var code = document.createElement("code");
+      code.textContent = a.code;
+      el.appAnswer.appendChild(b);
+      el.appAnswer.appendChild(code);
+      if (r.verdict === "MOVING") {
+        var cut = document.createElement("span");
+        cut.textContent = " (Slow below 0.5 m/s: our stated assumption)";
+        el.appAnswer.appendChild(cut);
+      }
+    } else {
+      var none = document.createElement("span");
+      none.textContent = "no answer. " + (a.why || "");
+      el.appAnswer.appendChild(none);
+    }
+  }
+
   function renderReading(r) {
     el.verdict.textContent = verdictWord(r);
     el.verdict.className = "verdict " + verdictClass(r);
     el.meta.textContent = num(r.secondsAnalysed, 1) + " s analysed · " + r.pairsUsed + " of " + r.pairsTotal +
       " pairs used · " + r.width + "×" + r.height + " at " + num(r.frameRate, 0) + " fps";
     renderFigure(r, 1);
+    renderAppAnswer(r);
     el.reason.textContent = r.reason;
     el.note.textContent = r.note || "";
     el.note.hidden = !r.note;
@@ -329,6 +379,7 @@
     el.figureUnit.textContent = "";
     el.compass.toggleAttribute("hidden", true);
     el.figureSub.textContent = "";
+    el.appAnswer.innerHTML = "";
     el.reason.textContent = "";
     el.note.hidden = true;
     el.record.innerHTML = "";
@@ -373,6 +424,7 @@
     el.reason.textContent = r.reason;
     el.note.textContent = r.note || "";
     el.note.hidden = !r.note;
+    renderAppAnswer(r);
     renderRecord(r);
     await animateNumber(r, 650);
   }
@@ -496,6 +548,7 @@
     el.figureUnit.textContent = "";
     el.compass.toggleAttribute("hidden", true);
     el.figureSub.textContent = "";
+    el.appAnswer.innerHTML = "";
     el.reason.textContent = "Drag on the clip to draw the water box over all of the water. Leave some bank outside it: the banks are how we check the camera held still.";
     el.note.textContent = "When you measure, the clip is uploaded, measured and deleted. Only its fingerprint is kept.";
     el.note.hidden = false;
@@ -519,6 +572,7 @@
     el.verdict.className = "verdict is-refused";
     el.figure.className = "figure is-working";
     el.figureValue.textContent = "—";
+    el.appAnswer.innerHTML = "";
     el.reason.textContent = message;
     el.note.hidden = true;
     renderGates(GATES.map(function (g) { return { name: g.name, value: "—", rule: "", status: "skip" }; }), false);
@@ -546,6 +600,7 @@
     el.figureValue.textContent = "…";
     el.compass.toggleAttribute("hidden", true);
     el.figureSub.textContent = "";
+    el.appAnswer.innerHTML = "";
     el.reason.textContent = "";
     el.note.hidden = true;
     el.record.innerHTML = "";
@@ -738,7 +793,8 @@
       var seconds = playing ? el.video.currentTime
         : scene.time % (state.sample ? state.sample.reading.secondsAnalysed + 0.1 : 5);
       var mm = Math.floor(seconds / 60), ss = seconds % 60;
-      el.hudTime.textContent = String(mm).padStart(2, "0") + ":" + ss.toFixed(2).padStart(5, "0");
+      el.hudTime.textContent = scene.image ? "still frame"
+        : String(mm).padStart(2, "0") + ":" + ss.toFixed(2).padStart(5, "0");
     }
     requestAnimationFrame(loop);
   }

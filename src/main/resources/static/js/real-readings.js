@@ -6,17 +6,22 @@
  */
 window.SLACKWATER_REAL = [
   {
-    "key": "r2",
+    "key": "r3",
     "label": "Geul · camera view",
     "real": true,
     "video": "/clips/geul/20241010_081717.mp4",
-    "overlay": "img/evidence/geul-2-overlay.png",
-    "evidence": "img/evidence/geul-2.png",
+    "overlay": "img/evidence/geul-3-overlay.png",
+    "evidence": "img/evidence/geul-3.png",
     "reading": {
+      "appFlowAnswer": {
+        "code": null,
+        "label": null,
+        "why": "Moving, but without a scale we can't tell Slow from Fast."
+      },
       "backgroundTracksMedian": 200.0,
       "cameraUnstableShare": 0.0,
       "clipPath": "geul/20241010_081717.mp4",
-      "createdAt": "2026-10-04T16:44:07.224598Z",
+      "createdAt": "2026-10-04T16:55:20.150874Z",
       "directionCoherence": 0.9321840215092025,
       "directionDegrees": 33.4965749845494,
       "engineVersion": "0.2.0",
@@ -25,7 +30,7 @@ window.SLACKWATER_REAL = [
       "fingerprint": "206572a8ce1afc34cdec1bb724691db29aa295b2553db057d691a875132a198a",
       "frameRate": 29.853181076672104,
       "height": 1080,
-      "id": 2,
+      "id": 3,
       "latitude": null,
       "longitude": null,
       "medianWaterSpeedPxPerSec": 180.15243102572518,
@@ -49,17 +54,22 @@ window.SLACKWATER_REAL = [
     }
   },
   {
-    "key": "r3",
+    "key": "r2",
     "label": "Geul · top-down at 0.01 m/px",
     "real": true,
     "video": null,
     "overlay": null,
-    "evidence": "img/evidence/geul-3.png",
+    "evidence": "img/evidence/geul-2.png",
     "reading": {
+      "appFlowAnswer": {
+        "code": "FAS",
+        "label": "Fast (with waves or high velocity)",
+        "why": "Surface speed 1.59 m/s, at or above our assumed cut-off of 0.5 m/s."
+      },
       "backgroundTracksMedian": 200.0,
       "cameraUnstableShare": 0.0,
       "clipPath": "geul/20241010_081717_ortho.mp4",
-      "createdAt": "2026-10-04T16:44:08.371873Z",
+      "createdAt": "2026-10-04T16:55:19.469957Z",
       "directionCoherence": 0.9745920074251502,
       "directionDegrees": 3.9363407929578216,
       "engineVersion": "0.2.0",
@@ -68,7 +78,7 @@ window.SLACKWATER_REAL = [
       "fingerprint": "ef2b9453e972b6348c28356988999e62f1103db41e845934ba69806b712819b2",
       "frameRate": 33.333,
       "height": 1196,
-      "id": 3,
+      "id": 2,
       "latitude": null,
       "longitude": null,
       "medianWaterSpeedPxPerSec": 157.47069360904206,
@@ -99,10 +109,15 @@ window.SLACKWATER_REAL = [
     "overlay": null,
     "evidence": "img/evidence/geul-1.png",
     "reading": {
+      "appFlowAnswer": {
+        "code": null,
+        "label": null,
+        "why": "Refused, so there's no answer to give. Dry can't be seen from video."
+      },
       "backgroundTracksMedian": 196.0,
       "cameraUnstableShare": 0.0,
       "clipPath": "geul/20241010_081717_ortho.mp4",
-      "createdAt": "2026-10-04T16:44:06.527238Z",
+      "createdAt": "2026-10-04T16:55:18.234268Z",
       "directionCoherence": null,
       "directionDegrees": null,
       "engineVersion": "0.2.0",
