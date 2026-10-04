@@ -88,16 +88,53 @@
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
-            <!-- The page lives in frontend/ at the top of the repo; it's packaged where Spring serves static files. -->
+            <!-- The page is a React app in frontend/; its build output is packaged where Spring serves static files. -->
             <resource>
-                <directory>frontend</directory>
+                <directory>frontend/dist</directory>
                 <targetPath>static</targetPath>
-                <excludes>
-                    <exclude>README.md</exclude>
-                </excludes>
             </resource>
         </resources>
         <plugins>
+            <!-- Builds the React frontend before resources are packaged. It downloads its own Node into frontend/node,
+                 so a fresh machine or the Docker build needs nothing installed. Skip with -Dskip.npm -Dskip.installnodenpm -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.15.1</version>
+                <configuration>
+                    <workingDirectory>frontend</workingDirectory>
+                    <nodeVersion>v24.21.0</nodeVersion>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>install --no-audit --no-fund</arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>npm-build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

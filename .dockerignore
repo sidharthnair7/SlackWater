@@ -2,3 +2,6 @@ target
 .idea
 .git
 *.iml
+frontend/node_modules
+frontend/node
+frontend/dist

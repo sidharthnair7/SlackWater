@@ -41,7 +41,7 @@
 
   <rect class="lane" x="320" y="110" width="200" height="58" rx="6"/>
   <text x="420" y="135" class="lt" text-anchor="middle">The page</text>
-  <text x="420" y="155" class="ls" text-anchor="middle">browser · app.js, scene.js</text>
+  <text x="420" y="155" class="ls" text-anchor="middle">React · App.tsx, Scene.ts</text>
 
   <rect class="lane" x="630" y="110" width="220" height="58" rx="6"/>
   <text x="740" y="135" class="lt" text-anchor="middle">Server</text>
@@ -150,7 +150,7 @@
   <rect class="box" x="820" y="1010" width="740" height="190" rx="6"/>
   <text x="840" y="1040" class="lt">Scoring the engine (Trini's part)</text>
   <text x="840" y="1068" class="t">1  Trini labels 15 to 20 Commons clips still / moving / can't tell,</text>
-  <text x="860" y="1088" class="t">before anything runs on them (the page measures nothing offline)</text>
+  <text x="860" y="1088" class="t">before anything runs on them (box drawn, Measure not pressed)</text>
   <text x="840" y="1112" class="t">2  the labels go in <tspan class="m">clips/labels.csv</tspan>, the clips in <tspan class="m">clips/commons/</tspan></text>
   <text x="840" y="1136" class="m">3  ./mvnw test -Dtest=LabelledClipsScoreTest</text>
   <text x="840" y="1160" class="t">4  <tspan class="m">clips/score.md</tspan>: Right · Wrong · Refused, out of n</text>

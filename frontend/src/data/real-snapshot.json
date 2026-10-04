@@ -1,25 +1,19 @@
-/*
- * Real readings: a snapshot of what engine 0.2.0 returned from GET /api/readings for the Geul flood clips
- * (Zenodo 15002591, CC BY 4.0), with their evidence pictures saved next to the page. Generated from the API's
- * JSON, not typed by hand. The page uses it only when the server isn't reachable (opened as a file).
- * The top-down clip is MPEG-4 Part 2, which browsers don't play, so it shows its evidence frame instead.
- */
-window.SLACKWATER_REAL = [
+[
   {
     "key": "r3",
     "label": "Geul · camera view",
     "real": true,
     "video": "/clips/geul/20241010_081717.mp4",
-    "overlay": "img/evidence/geul-3-overlay.png",
-    "evidence": "img/evidence/geul-3.png",
+    "overlay": "/img/evidence/geul-3-overlay.png",
+    "evidence": "/img/evidence/geul-3.png",
     "reading": {
       "appFlowAnswer": {
         "code": null,
         "label": null,
         "why": "Moving, but without a scale we can't tell Slow from Fast."
       },
-      "backgroundTracksMedian": 200.0,
-      "cameraUnstableShare": 0.0,
+      "backgroundTracksMedian": 200,
+      "cameraUnstableShare": 0,
       "clipPath": "geul/20241010_081717.mp4",
       "createdAt": "2026-10-04T16:55:20.150874Z",
       "directionCoherence": 0.9321840215092025,
@@ -59,15 +53,15 @@ window.SLACKWATER_REAL = [
     "real": true,
     "video": null,
     "overlay": null,
-    "evidence": "img/evidence/geul-2.png",
+    "evidence": "/img/evidence/geul-2.png",
     "reading": {
       "appFlowAnswer": {
         "code": "FAS",
         "label": "Fast (with waves or high velocity)",
         "why": "Surface speed 1.59 m/s, at or above our assumed cut-off of 0.5 m/s."
       },
-      "backgroundTracksMedian": 200.0,
-      "cameraUnstableShare": 0.0,
+      "backgroundTracksMedian": 200,
+      "cameraUnstableShare": 0,
       "clipPath": "geul/20241010_081717_ortho.mp4",
       "createdAt": "2026-10-04T16:55:19.469957Z",
       "directionCoherence": 0.9745920074251502,
@@ -97,7 +91,7 @@ window.SLACKWATER_REAL = [
       "surfaceSpeedPxPerSec": 158.93649928494426,
       "verdict": "MOVING",
       "videoSha256": "e1bac0685b9b4bba1710eb7bba2abff615ea13066fe2813595461842d1c1b370",
-      "waterTracksMedian": 246.0,
+      "waterTracksMedian": 246,
       "width": 1016
     }
   },
@@ -107,15 +101,15 @@ window.SLACKWATER_REAL = [
     "real": true,
     "video": null,
     "overlay": null,
-    "evidence": "img/evidence/geul-1.png",
+    "evidence": "/img/evidence/geul-1.png",
     "reading": {
       "appFlowAnswer": {
         "code": null,
         "label": null,
         "why": "Refused, so there's no answer to give. Dry can't be seen from video."
       },
-      "backgroundTracksMedian": 196.0,
-      "cameraUnstableShare": 0.0,
+      "backgroundTracksMedian": 196,
+      "cameraUnstableShare": 0,
       "clipPath": "geul/20241010_081717_ortho.mp4",
       "createdAt": "2026-10-04T16:55:18.234268Z",
       "directionCoherence": null,
@@ -145,8 +139,8 @@ window.SLACKWATER_REAL = [
       "surfaceSpeedPxPerSec": null,
       "verdict": "REFUSED",
       "videoSha256": "e1bac0685b9b4bba1710eb7bba2abff615ea13066fe2813595461842d1c1b370",
-      "waterTracksMedian": 227.0,
+      "waterTracksMedian": 227,
       "width": 1016
     }
   }
-];
+]

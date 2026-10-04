@@ -28,12 +28,12 @@
 
   <!-- Title -->
   <text x="40" y="58" class="h1">SlackWater: how it works</text>
-  <text x="40" y="86" class="sub">Engine 0.2.0 · Java 25 · Spring Boot 4.1 · JavaCV (OpenCV 4.14 + FFmpeg 8.1) · H2 · plain HTML/CSS/JS page</text>
+  <text x="40" y="86" class="sub">Engine 0.2.0 · Java 25 · Spring Boot 4.1 · JavaCV (OpenCV 4.14 + FFmpeg 8.1) · H2 · React + TypeScript page (Vite)</text>
 
   <!-- ===== Row 1 ===== -->
   <!-- A: the page -->
   <rect class="box" x="40" y="120" width="300" height="230" rx="6"/>
-  <text x="58" y="148" class="label">BROWSER</text>
+  <text x="58" y="148" class="label">BROWSER · REACT + TYPESCRIPT</text>
   <text x="58" y="172" class="title">The page</text>
   <text x="58" y="200" class="t">Measure · Readings · Method</text>
   <text x="58" y="224" class="t">Draw the water box on the clip</text>

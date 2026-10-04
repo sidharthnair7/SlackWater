@@ -40,6 +40,7 @@ slackwater.example.com {
 
 ## Notes
 
+- The page is a React app in `frontend/`. The Maven build downloads its own Node and builds it, so the Docker image needs nothing extra, but the first build needs internet access for Node and the npm packages.
 - Uploads are capped at 200 MB (`application.properties`).
 - The build downloads about 1 GB of Maven dependencies the first time; later builds reuse the cached layer.
 - Local development on Windows uses `.mvn/maven.config` (`-Djavacpp.platform=windows-x86_64`); the Dockerfile
