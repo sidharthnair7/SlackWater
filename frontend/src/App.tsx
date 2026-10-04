@@ -10,15 +10,16 @@ import { ClipList } from './components/ClipList'
 import { OwnClipForm } from './components/OwnClipForm'
 import { ReadingsView } from './components/ReadingsView'
 import { MethodView } from './components/MethodView'
+import { Landing } from './landing/Landing'
 
-type View = 'measure' | 'readings' | 'method'
+type View = 'home' | 'measure' | 'readings' | 'method'
 
 const DEFAULT_REGION: Region = { x: 0, y: 1 / 3, w: 1, h: 1 / 3 }
 const OWN_REGION: Region = { x: 0.1, y: 0.3, w: 0.8, h: 0.5 }
 
 function readView(): View {
   const v = window.location.hash.slice(1)
-  return v === 'readings' || v === 'method' ? v : 'measure'
+  return v === 'measure' || v === 'readings' || v === 'method' ? v : 'home'
 }
 
 function regionForClip(c: Clip): Region {
@@ -202,13 +203,15 @@ export function App() {
 
   return (
     <>
-      <div className={'notice' + (live ? ' is-live' : '')} role="note">
-        <span className="notice-tag">{live ? 'Live' : 'Offline'}</span>
-        <span>{notice}</span>
-      </div>
+      {view !== 'home' && (
+        <div className={'notice' + (live ? ' is-live' : '')} role="note">
+          <span className="notice-tag">{live ? 'Live' : 'Offline'}</span>
+          <span>{notice}</span>
+        </div>
+      )}
 
       <header className="topbar">
-        <a className="brand" href="#measure" aria-label="SlackWater home">
+        <a className="brand" href="#home" aria-label="SlackWater home">
           <svg className="brand-mark" viewBox="0 0 20 24" aria-hidden="true">
             <path d="M4 1v22" />
             <path d="M4 4h7M4 9h5M4 14h7M4 19h5" />
@@ -217,7 +220,7 @@ export function App() {
           <span className="brand-name">SlackWater</span>
         </a>
         <nav className="tabs" aria-label="Sections">
-          {(['measure', 'readings', 'method'] as View[]).map((v) => (
+          {(['home', 'measure', 'readings', 'method'] as View[]).map((v) => (
             <a key={v} href={`#${v}`} aria-current={view === v ? 'page' : undefined}>
               {v[0].toUpperCase() + v.slice(1)}
             </a>
@@ -226,7 +229,21 @@ export function App() {
         <span className="engine-tag">engine <b>0.2.0</b></span>
       </header>
 
-      <main>
+      {view === 'home' && (
+        <Landing
+          real={real}
+          live={live}
+          onOpen={(key) => {
+            window.location.hash = 'measure'
+            pick(key)
+          }}
+          onMeasure={() => {
+            window.location.hash = 'measure'
+          }}
+        />
+      )}
+
+      <main hidden={view === 'home'}>
         {view === 'measure' && (
           <section className="view">
             <div className="measure">
@@ -287,7 +304,7 @@ export function App() {
         {view === 'method' && <MethodView />}
       </main>
 
-      <footer className="footer">
+      <footer className="footer" hidden={view === 'home'}>
         <span>SlackWater · built for the OneAquaHealth hackathon</span>
         <span>Surface velocity only · Thresholds are our stated assumptions</span>
       </footer>

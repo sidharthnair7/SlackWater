@@ -119,6 +119,12 @@ button, input { font: inherit; color: inherit; }
   white-space: nowrap;
 }
 .engine-tag b { color: var(--ink); font-weight: 500; }
+@media (max-width: 640px) {
+  .topbar { flex-wrap: wrap; gap: 6px 12px; padding-block: 10px; }
+  .engine-tag { display: none; }
+  .tabs { width: 100%; overflow-x: auto; gap: 0; margin-inline: -6px; }
+  .tabs a { padding: 6px 8px; white-space: nowrap; }
+}
 
 main {
   max-width: 1320px;
