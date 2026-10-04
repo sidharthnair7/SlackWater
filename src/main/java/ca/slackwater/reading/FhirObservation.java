@@ -29,6 +29,7 @@ final class FhirObservation {
     static final String SITE_SYSTEM = "urn:slackwater:site";
     static final String FLOW_STATE_SYSTEM = "urn:slackwater:flow-state";
     static final String APP_FLOW_SYSTEM = "urn:oneaquahealth:citizen-app:water-flow";
+    static final String DKG_SYSTEM = "urn:origintrail:dkg";
 
     private FhirObservation() {
     }
@@ -39,7 +40,14 @@ final class FhirObservation {
         obs.put("id", "slackwater-" + r.getId());
         obs.put("meta", Map.of("profile", List.of(PROFILE)));
         obs.put("contained", List.of(location(r), device(r)));
-        obs.put("identifier", List.of(Map.of("system", FINGERPRINT_SYSTEM, "value", r.getFingerprint())));
+        List<Map<String, Object>> identifiers = new ArrayList<>();
+        identifiers.add(Map.of("system", FINGERPRINT_SYSTEM, "value", r.getFingerprint()));
+        if (r.getAnchor() != null) {
+            // Where the same reading sits on the OriginTrail DKG: the on-chain UAL if published, else its locator.
+            identifiers.add(Map.of("system", DKG_SYSTEM,
+                    "value", r.getAnchor().onChain() ? r.getAnchor().ual() : r.getAnchor().locator()));
+        }
+        obs.put("identifier", identifiers);
         obs.put("status", "final");
         obs.put("code", Map.of(
                 "coding", List.of(Map.of("system", OAH_CODES, "code", "hydrology", "display", "Hydrology of the stream")),

@@ -4,6 +4,7 @@ import ca.slackwater.analysis.AnalysisResult;
 import ca.slackwater.analysis.GateValues;
 import ca.slackwater.analysis.Refusal;
 import ca.slackwater.analysis.Verdict;
+import ca.slackwater.ledger.Anchor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -14,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -91,6 +93,15 @@ public class Reading {
     @Basic(fetch = FetchType.LAZY)
     @JsonIgnore
     private byte[] overlayPng;
+
+    /** Where this reading is anchored on the OriginTrail DKG, if it is. Looked up by fingerprint, not stored here. */
+    @Transient
+    private Anchor anchor;
+
+    public Reading withAnchor(Anchor anchor) {
+        this.anchor = anchor;
+        return this;
+    }
 
     /** The reading in the OneAquaHealth app's own flow vocabulary (FAS / NOR / STA), worked out, not stored. */
     public AppFlowAnswer getAppFlowAnswer() {

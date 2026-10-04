@@ -494,6 +494,9 @@ main {
 }
 .copy:hover { border-color: var(--ink); }
 .record a { color: var(--water); font-size: 0.75rem; }
+.dkg-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+.dkg-actions .copy { padding: 4px 10px; font-size: 0.75rem; }
+.dkg-message { font-size: 0.75rem; color: var(--muted); }
 .record-note { grid-column: 1 / -1; margin: 4px 0 0; font-size: 0.75rem; color: var(--muted); }
 
 .measure-btn {

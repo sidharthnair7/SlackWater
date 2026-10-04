@@ -8,6 +8,25 @@ export interface AppFlowAnswer {
   why: string
 }
 
+/** Where a reading is anchored on the OriginTrail DKG. */
+export interface Anchor {
+  fingerprint: string
+  /** Shared Working Memory locator, written by the app (no gas). */
+  locator: string
+  /** On-chain UAL once published to Verifiable Memory, else empty. */
+  ual: string
+  /** The Base Sepolia transaction for that publish, else empty. */
+  tx: string
+  anchoredAt: string
+}
+
+/** Whether this server can anchor readings (it needs a DKG node beside it). */
+export interface Ledger {
+  enabled: boolean
+  contextGraph: string
+  network: string
+}
+
 /** One reading, exactly as GET /api/readings returns it. */
 export interface Reading {
   id: number
@@ -44,6 +63,7 @@ export interface Reading {
   medianWaterSpeedPxPerSec: number | null
   evidenceAvailable?: boolean
   appFlowAnswer?: AppFlowAnswer
+  anchor?: Anchor | null
 }
 
 /** The water box, as fractions of the frame (0 to 1). */

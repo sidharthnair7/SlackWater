@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { Clip, Region } from './types'
+import type { Clip, Ledger, Reading, Region } from './types'
 import { SNAPSHOT, TEST_CLIPS } from './data/clips'
-import { clipFromReading, fetchReadings, measureClip } from './api'
+import { clipFromReading, fetchLedger, fetchReadings, measureClip } from './api'
 import { regionOf } from './lib/appAnswer'
 import { Viewport } from './components/Viewport'
 import { Readout } from './components/Readout'
@@ -49,6 +49,7 @@ export function App() {
   const [site, setSite] = useState('')
   const [scale, setScale] = useState('')
   const [busy, setBusy] = useState(false)
+  const [ledger, setLedger] = useState<Ledger | null>(null)
   const run = useRef(0)
   const pickedByUser = useRef(false)
 
@@ -90,6 +91,9 @@ export function App() {
           return
         }
         setWaiting(false)
+        fetchLedger().then((l) => {
+          if (!cancelled) setLedger(l)
+        })
         const liveClips = list.map(clipFromReading)
         setReal(liveClips)
         // Open on the newest reading whose clip plays (real footage moving), not a still evidence frame.
@@ -156,6 +160,12 @@ export function App() {
     } finally {
       setBusy(false)
     }
+  }
+
+  /** A reading changed on the server (it was anchored): show the new version everywhere. */
+  function onReading(updated: Reading) {
+    setReal((list) => list.map((c) => (c.reading.id === updated.id ? { ...c, reading: updated } : c)))
+    setReadout((r) => (r.kind === 'reading' && r.reading.id === updated.id ? { ...r, reading: updated, animate: 0 } : r))
   }
 
   function replay() {
@@ -255,6 +265,8 @@ export function App() {
               <Readout
                 state={readout}
                 live={live}
+                ledger={ledger}
+                onReading={onReading}
                 buttonLabel={button.label}
                 buttonDisabled={button.disabled}
                 hint={hint}

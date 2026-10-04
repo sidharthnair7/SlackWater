@@ -1,4 +1,4 @@
-import type { Clip, Reading, Region } from './types'
+import type { Clip, Ledger, Reading, Region } from './types'
 import { shortLabel } from './lib/format'
 
 /** An API reading, turned into what the viewport needs. */
@@ -22,6 +22,34 @@ export async function fetchReadings(): Promise<Reading[]> {
   const list: unknown = await res.json()
   if (!Array.isArray(list)) throw new Error('The engine sent something that is not a list')
   return list as Reading[]
+}
+
+export async function fetchLedger(): Promise<Ledger | null> {
+  try {
+    const res = await fetch('/api/readings/ledger')
+    return res.ok ? ((await res.json()) as Ledger) : null
+  } catch {
+    return null
+  }
+}
+
+async function readError(res: Response): Promise<Error> {
+  const body = await res.json().catch(() => ({}))
+  return new Error((body as { error?: string }).error || `The engine answered with an error (${res.status}).`)
+}
+
+/** Shares the reading to the DKG context graph's Shared Working Memory; returns it with its anchor. */
+export async function anchorReading(id: number): Promise<Reading> {
+  const res = await fetch(`/api/readings/${id}/anchor`, { method: 'POST' })
+  if (!res.ok) throw await readError(res)
+  return (await res.json()) as Reading
+}
+
+/** Reads the reading back from the DKG and checks the fingerprint there matches. */
+export async function verifyReading(id: number): Promise<boolean> {
+  const res = await fetch(`/api/readings/${id}/anchor/verify`)
+  if (!res.ok) throw await readError(res)
+  return ((await res.json()) as { found: boolean }).found
 }
 
 export interface MeasureRequest {

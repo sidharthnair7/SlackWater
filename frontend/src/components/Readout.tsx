@@ -1,9 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Reading } from '../types'
+import type { Ledger, Reading } from '../types'
+import { anchorReading, verifyReading } from '../api'
 import { clock, heading, metaLine, num, pct, shortHash, verdictClass, verdictWord } from '../lib/format'
 import { emptyGates, gateName, gateRows } from '../lib/gates'
 import type { GateRow } from '../lib/gates'
 import { appAnswerOf } from '../lib/appAnswer'
+
+/** "did:dkg:context-graph:0x5E…/slackwater/_working_memory/0x5e…/19" becomes "did:dkg:…/slackwater/…/19". */
+function shortDid(did: string): string {
+  const parts = did.split('/')
+  const graph = parts.includes('slackwater') ? 'slackwater/…/' : ''
+  return `${did.split(':').slice(0, 2).join(':')}:…/${graph}${parts[parts.length - 1]}`
+}
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -18,16 +26,18 @@ export type ReadoutState =
 interface Props {
   state: ReadoutState
   live: boolean
+  ledger: Ledger | null
+  onReading: (reading: Reading) => void
   buttonLabel: string
   buttonDisabled: boolean
   hint: string
   onButton: () => void
 }
 
-export function Readout({ state, live, buttonLabel, buttonDisabled, hint, onButton }: Props) {
+export function Readout({ state, live, ledger, onReading, buttonLabel, buttonDisabled, hint, onButton }: Props) {
   return (
     <aside className={'readout' + (state.kind === 'uploading' ? ' is-measuring' : '')} aria-live="polite">
-      {state.kind === 'reading' && <ReadingView key={`${state.reading.id}-${state.reading.fingerprint}-${state.animate}`} state={state} live={live} />}
+      {state.kind === 'reading' && <ReadingView key={`${state.reading.id}-${state.reading.fingerprint}-${state.animate}`} state={state} live={live} ledger={ledger} onReading={onReading} />}
       {state.kind === 'own-ready' && (
         <Pending
           verdict="Not measured"
@@ -74,7 +84,12 @@ function Pending({ verdict, meta, reason, note, log, refused }: {
 }
 
 /** A reading, revealed step by step like a measurement in progress (or all at once when animate is 0). */
-function ReadingView({ state, live }: { state: Extract<ReadoutState, { kind: 'reading' }>; live: boolean }) {
+function ReadingView({ state, live, ledger, onReading }: {
+  state: Extract<ReadoutState, { kind: 'reading' }>
+  live: boolean
+  ledger: Ledger | null
+  onReading: (reading: Reading) => void
+}) {
   const r = state.reading
   const rows = gateRows(r)
   const animate = state.animate > 0 && !reduceMotion
@@ -142,6 +157,7 @@ function ReadingView({ state, live }: { state: Extract<ReadoutState, { kind: 're
         <>
           <h2 className="block-title">Record</h2>
           <Record r={r} real={state.real} live={live} />
+          {state.real && (r.anchor || ledger?.enabled) && <DkgBlock r={r} ledger={ledger} onReading={onReading} />}
         </>
       )}
     </>
@@ -282,6 +298,71 @@ function RecordList({ r, real, live }: { r: Reading; real: boolean; live: boolea
   )
 }
 
+/** The reading on the OriginTrail DKG: where it's anchored, and a check that reads it back. */
+function DkgBlock({ r, ledger, onReading }: { r: Reading; ledger: Ledger | null; onReading: (reading: Reading) => void }) {
+  const [busy, setBusy] = useState(false)
+  const [message, setMessage] = useState('')
+  const a = r.anchor
+
+  async function anchor() {
+    setBusy(true)
+    setMessage('')
+    try {
+      onReading(await anchorReading(r.id))
+    } catch (e) {
+      setMessage((e as Error).message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function verify() {
+    setBusy(true)
+    setMessage('Reading it back from the DKG…')
+    try {
+      setMessage((await verifyReading(r.id))
+        ? 'Found on the DKG, with this exact fingerprint.'
+        : 'Not found on the DKG with this fingerprint.')
+    } catch (e) {
+      setMessage((e as Error).message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <>
+      <h2 className="block-title">OriginTrail DKG</h2>
+      {a ? (
+        <dl className="record">
+          <dt>{a.ual ? 'On-chain UAL' : 'Shared memory'}</dt>
+          <dd><Hash value={a.ual || a.locator} /></dd>
+          {a.tx && (
+            <>
+              <dt>Transaction</dt>
+              <dd><a href={`https://sepolia.basescan.org/tx/${a.tx}`} target="_blank" rel="noopener">Base Sepolia</a></dd>
+            </>
+          )}
+          <dt>Anchored</dt>
+          <dd><code>{clock(a.anchoredAt)}</code></dd>
+        </dl>
+      ) : (
+        <p className="record-note">Not anchored yet. Anchoring shares the reading, with its fingerprint, to the public knowledge graph.</p>
+      )}
+      <div className="dkg-actions">
+        {!a && ledger?.enabled && <button type="button" className="copy" disabled={busy} onClick={anchor}>Anchor on the DKG</button>}
+        {a && ledger?.enabled && <button type="button" className="copy" disabled={busy} onClick={verify}>Verify on the DKG</button>}
+        {message && <span className="dkg-message">{message}</span>}
+      </div>
+      <p className="record-note">
+        {a?.ual
+          ? 'Published to Verifiable Memory on Base Sepolia (testnet).'
+          : "In the context graph's Shared Working Memory on the OriginTrail DKG V10 testnet. Moving it on-chain is a separate step."}
+      </p>
+    </>
+  )
+}
+
 function Hash({ value }: { value: string }) {
   const [copied, setCopied] = useState(false)
   const [full, setFull] = useState(false)
@@ -310,7 +391,7 @@ function Hash({ value }: { value: string }) {
   }
   return (
     <>
-      <code ref={codeRef}>{full ? value : shortHash(value)}</code>
+      <code ref={codeRef}>{full ? value : value.startsWith('did:') ? shortDid(value) : shortHash(value)}</code>
       <button type="button" className="copy" onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
     </>
   )
