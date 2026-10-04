@@ -331,7 +331,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
             <Reveal delay={0.12} className="lp-stat"><p className="lp-stat-n"><Counter value={7} /></p><p>gates, run in order; the first that fails is the refusal</p></Reveal>
             <Reveal delay={0.18} className="lp-stat"><p className="lp-stat-n"><Counter value={34} /></p><p>automated tests passing, on synthetic and real footage</p></Reveal>
           </div>
-          <p className="lp-small">Synthetic clips prove the maths. The flood video has no independent reference speed, so 1.59 m/s is the engine’s answer, not a checked one. A score on clips labelled by a person comes next.</p>
+          <p className="lp-small">Synthetic clips prove the maths. The flood video has no independent reference speed, so 1.59 m/s is the engine’s answer, not a checked one. On nine more clips labelled by a person before measuring: 1 right, 1 wrong, 7 refused, most because the phone moved.</p>
         </div>
       </section>
 

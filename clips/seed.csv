@@ -4,3 +4,13 @@
 geul/20241010_081717.mp4,0.05,0.30,0.68,0.55,,Geul at Hommerich (NL) · camera view
 geul/20241010_081717_ortho.mp4,0.0,0.14,1.0,0.74,0.01,Geul at Hommerich (NL) · top-down at 0.01 m/px
 geul/20241010_081717_ortho.mp4,0.30,0.20,0.68,0.65,0.01,Geul at Hommerich (NL) · box drawn too small
+# Trinidad's labelled clips from Wikimedia Commons, measured with the same boxes as labels.csv.
+commons/moving1.mp4,0,0.1,0.6,0.75,,Commons · moving1
+commons/moving2 (online-video-cutter.com).mp4,0,0,1,0.5,,Commons · moving2
+commons/moving3 (online-video-cutter.com).mp4,0.1,0.1,0.8,0.8,,Commons · moving3
+commons/moving4.mp4,0,0.6,1,0.4,,Commons · moving4
+commons/moving5 (online-video-cutter.com).mp4,0.15,0.3,0.6,0.7,,Commons · moving5
+commons/still1.mp4,0.1,0.2,0.8,0.7,,Commons · still1
+commons/still2.mp4,0.1,0.2,0.7,0.6,,Commons · still2
+commons/still3.mp4,0,0.2,1,0.65,,Commons · still3
+commons/test1 (online-video-cutter.com).mp4,0,0.12,1,0.75,,Commons · test1

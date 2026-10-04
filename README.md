@@ -48,7 +48,7 @@ Real flood footage of the Geul at Hommerich, Netherlands, at the peak of a high-
 | Top-down, 0.01 m per pixel | **MOVING** | **1.59 m/s** → app answer `FAS` | 99% | 0.97 | 40 / 40 |
 | Top-down, box drawn too small | **REFUSED** · `BACKGROUND_MOVING` | none | | | 40 / 40 |
 
-On a synthetic strip moving at exactly 60 px/s, the engine measures **60.000 px/s**. The flood clip has no independent reference speed, so 1.59 m/s is the engine’s answer, not a checked one. A score against clips labelled blind by a person comes next: `./mvnw test -Dtest=LabelledClipsScoreTest` writes it to `clips/score.md`.
+On a synthetic strip moving at exactly 60 px/s, the engine measures **60.000 px/s**. The flood clip has no independent reference speed, so 1.59 m/s is the engine’s answer, not a checked one. On nine more clips from Wikimedia Commons, found and labelled by Trinidad before the engine saw them: **1 right, 1 wrong, 7 refused** ([clips/score.md](clips/score.md)). Most were filmed handheld, so the banks moved and the engine refused rather than guess; one moving stream was called still, a real miss we're keeping in the score. Rerun it with `./mvnw test -Dtest=LabelledClipsScoreTest`.
 
 <div align="center">
 <img src="frontend/public/img/evidence/geul-2.png" alt="Evidence frame: blue arrows across the whole river, the box over all the water" width="46%">

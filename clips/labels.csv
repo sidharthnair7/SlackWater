@@ -1,0 +1,11 @@
+# Clips found and labelled by Trinidad Laguardia before measuring (label from her file names). Boxes drawn over all the water by Claude from a frame of each clip.
+file,label,regionX,regionY,regionWidth,regionHeight,why
+commons/moving1.mp4,moving,0,0.1,0.6,0.75,labelled by Trinidad
+commons/moving2 (online-video-cutter.com).mp4,moving,0,0,1,0.5,labelled by Trinidad
+commons/moving3 (online-video-cutter.com).mp4,moving,0.1,0.1,0.8,0.8,labelled by Trinidad
+commons/moving4.mp4,moving,0,0.6,1,0.4,labelled by Trinidad
+commons/moving5 (online-video-cutter.com).mp4,moving,0.15,0.3,0.6,0.7,labelled by Trinidad
+commons/still1.mp4,still,0.1,0.2,0.8,0.7,labelled by Trinidad
+commons/still2.mp4,still,0.1,0.2,0.7,0.6,labelled by Trinidad
+commons/still3.mp4,still,0,0.2,1,0.65,labelled by Trinidad
+commons/test1 (online-video-cutter.com).mp4,cant-tell,0,0.12,1,0.75,labelled by Trinidad

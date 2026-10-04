@@ -1,5 +1,6 @@
 import type { Clip } from '../types'
 import { num } from '../lib/format'
+import staticIndex from '../data/points-index.json'
 
 /*
  * Every point the engine followed, across every video it has measured: one entry per disc. Live readings come
@@ -54,12 +55,9 @@ export interface Field {
   speed: Float32Array
 }
 
-// The Geul seed readings by fingerprint: the same clip, box and engine always give the same one.
-const STATIC_POINTS: Record<string, string> = {
-  '206572a8ce1afc34cdec1bb724691db29aa295b2553db057d691a875132a198a': 'geul-camera',
-  ef2b9453e972b6348c28356988999e62f1103db41e845934ba69806b712819b2: 'geul-topdown',
-  '813f93f26818ee369ac7fd91b8a25e60d4ae63c4f57c5327aabe5f3b5ceb1662': 'geul-small-box',
-}
+// Every seed reading's points ship as a file too (by fingerprint: the same clip, box and engine always give the
+// same one), so the field works with no engine behind the page.
+const STATIC_POINTS: Record<string, string> = staticIndex
 
 async function cloudFor(clip: Clip, live: boolean): Promise<PointCloud | null> {
   const r = clip.reading
@@ -83,14 +81,32 @@ function result(c: Clip): string {
   return r.verdict === 'STILL' ? 'Still' : 'Refused'
 }
 
+// Enough discs to read the patterns, few enough for a phone to draw smoothly.
+const DISC_BUDGET = 60_000
+
+/** An even, repeatable sample of at most `max` points (six numbers each). */
+function thin(points: number[], max: number): number[] {
+  const n = points.length / 6
+  if (n <= max) return points
+  const out: number[] = []
+  for (let k = 0; k < max; k++) {
+    const p = Math.floor((k * n) / max) * 6
+    for (let j = 0; j < 6; j++) out.push(points[p + j])
+  }
+  return out
+}
+
 export async function loadField(clips: Clip[], live: boolean): Promise<Field> {
   const real = clips.filter((c) => c.real)
   const clouds = await Promise.all(real.map((c) => cloudFor(c, live).catch(() => null)))
   const videos: FieldVideo[] = []
   const parts: { cloud: PointCloud; v: number }[] = []
+  const withPoints = clouds.filter((c) => c && c.points.length > 0).length
+  const perVideo = Math.max(1000, Math.floor(DISC_BUDGET / Math.max(1, withPoints)))
   real.forEach((c, i) => {
-    const cloud = clouds[i]
-    if (!cloud) return
+    const loaded = clouds[i]
+    if (!loaded) return
+    const cloud = { ...loaded, points: thin(loaded.points, perVideo) }
     parts.push({ cloud, v: videos.length })
     videos.push({
       key: c.key,

@@ -90,7 +90,7 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
 
         <div className="start-samples">
           <p className="start-label">No clip with you? Try a real one.</p>
-          {real.map((c) => (
+          {real.slice(0, 3).map((c) => (
             <button key={c.key} type="button" className="sample-card" onClick={() => onPick(c.key)}>
               <span className="sample-thumb">
                 <img src={c.video ? '/img/geul-poster.jpg' : c.evidence ?? '/img/geul-poster.jpg'} alt="" loading="lazy" />
@@ -103,6 +103,11 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
             </button>
           ))}
           <p className="start-credit">Real flood footage of the Geul, Netherlands. Zenodo 15002591, CC BY 4.0.</p>
+          {real.length > 3 && (
+            <p className="start-credit">
+              <a href="#readings">{real.length - 3} more real clips in Readings</a>, labelled by a person before the engine saw them.
+            </p>
+          )}
         </div>
       </div>
 

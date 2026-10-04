@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/** Starts the app the way it runs live: seeding on, so the three Geul readings are there from the start. */
+/** Starts the app the way it runs live: seeding on, so the three Geul readings (and Trinidad's nine labelled clips) are there from the start. */
 @SpringBootTest
 @AutoConfigureMockMvc
 class SeedReadingsTest {
@@ -28,7 +28,7 @@ class SeedReadingsTest {
     void theLiveSiteStartsWithRealReadings() throws Exception {
         mvc.perform(get("/api/readings"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(3))
+                .andExpect(jsonPath("$.length()").value(12))
                 .andExpect(jsonPath("$[0].verdict").value("MOVING"))
                 .andExpect(jsonPath("$[0].clipPath").value("geul/20241010_081717.mp4"))
                 .andExpect(jsonPath("$[0].evidenceAvailable").value(true))
