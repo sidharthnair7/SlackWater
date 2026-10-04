@@ -35,7 +35,7 @@
   <rect class="box" x="40" y="120" width="300" height="230" rx="6"/>
   <text x="58" y="148" class="label">BROWSER · REACT + TYPESCRIPT</text>
   <text x="58" y="172" class="title">The page</text>
-  <text x="58" y="200" class="t">Measure · Readings · Method</text>
+  <text x="58" y="200" class="t">Measure · Readings · 3D field · Method</text>
   <text x="58" y="224" class="t">Draw the water box on the clip</text>
   <text x="58" y="248" class="t">Upload your own clip</text>
   <text x="58" y="272" class="t">Live from the engine, or the</text>
@@ -51,7 +51,7 @@
   <text x="458" y="224" class="m">GET  /api/readings</text>
   <text x="458" y="246" class="m">GET  /api/readings/{id}</text>
   <text x="458" y="268" class="m">     …/evidence.png  …/overlay.png</text>
-  <text x="458" y="290" class="m">     …/fhir</text>
+  <text x="458" y="290" class="m">     …/fhir   …/points</text>
   <text x="458" y="318" class="m">GET  /clips/**</text>
   <text x="590" y="318" class="small">(ClipFilesConfig, read-only)</text>
   <text x="458" y="340" class="small">Bad water box → 400 with the reason in words</text>
@@ -134,7 +134,7 @@
   </g>
 
   <!-- gates -->
-  <text x="200" y="622" class="t" font-weight="600">Gates, in order, 1 to 6. The first one that fails becomes the refusal, in plain words.</text>
+  <text x="200" y="622" class="t" font-weight="600">Gates, in order, once the video reads. The first one that fails becomes the refusal, in plain words.</text>
   <g>
     <rect class="gate" x="64" y="630" width="226" height="64" rx="5"/>
     <text x="78" y="656" class="t" font-weight="600">1  Enough video</text>
@@ -217,17 +217,17 @@
   <rect class="box" x="1210" y="850" width="350" height="190" rx="6"/>
   <text x="1228" y="878" class="label">WHERE IT GOES</text>
   <text x="1228" y="902" class="title">Results</text>
-  <text x="1228" y="930" class="t">the page: readout, Readings</text>
+  <text x="1228" y="930" class="t">the page: readout, Readings, 3D field</text>
   <text x="1228" y="952" class="t">FHIR for OneAquaHealth systems</text>
-  <text x="1228" y="978" class="t">Scorer: labelled clips →</text>
-  <text x="1228" y="998" class="m">clips/score.md</text>
+  <text x="1228" y="978" class="t">OriginTrail DKG: Knowledge Asset</text>
+  <text x="1228" y="998" class="m">on-chain, Base Sepolia</text>
   <rect class="dashed" x="1222" y="1006" width="326" height="26" rx="4"/>
-  <text x="1232" y="1024" class="small">not built yet: sandbox POST, live deploy</text>
+  <text x="1232" y="1024" class="small">not built yet: FHIR sandbox POST, hosted engine</text>
 
   <line class="edge" x1="400" y1="945" x2="438" y2="945" marker-end="url(#arrow)"/>
   <line class="edge" x1="770" y1="945" x2="808" y2="945" marker-end="url(#arrow)"/>
   <line class="edge" x1="1170" y1="945" x2="1208" y2="945" marker-end="url(#arrow)"/>
 
   <!-- footer -->
-  <text x="40" y="1080" class="small">Solid: built and tested (28 tests, plus the scorer waiting for labels). Dashed: not built yet. Ships as one Docker image with Linux native libraries and the seed clips (Dockerfile written, not yet built).</text>
+  <text x="40" y="1080" class="small">Solid: built and tested (35 tests: 34 pass, 1 waits for labelled clips). Dashed: not built yet. Ships as one Docker image (Dockerfile written, not yet built); the page also runs alone as a demo.</text>
 </svg>

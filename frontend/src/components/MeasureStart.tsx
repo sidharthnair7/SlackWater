@@ -84,7 +84,7 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
           <span className="drop-sub">or <u>choose a video</u> · MP4 or MOV, up to 200 MB</span>
           <span className="drop-note">Your clip is measured, then deleted. Only its fingerprint is kept.</span>
           {!live && (
-            <span className="drop-warn">Measuring needs the SlackWater engine, and it isn’t running behind this page right now. The samples still work.</span>
+            <span className="drop-warn">This demo page has no engine behind it, so it can’t measure uploads. The samples are real readings. To measure your own clip, run SlackWater from the GitHub repo (one command).</span>
           )}
         </label>
 

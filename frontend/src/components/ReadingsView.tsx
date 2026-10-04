@@ -45,14 +45,14 @@ export function ReadingsView({ clips, onOpen }: { clips: Clip[]; onOpen: (key: s
               const r = c.reading
               return (
                 <tr key={c.key} tabIndex={0} onClick={() => onOpen(c.key)} onKeyDown={(e) => e.key === 'Enter' && onOpen(c.key)}>
-                  <td className="data">{clock(r.createdAt)}</td>
-                  <td>
+                  <td className="data" data-label="Time">{clock(r.createdAt)}</td>
+                  <td className="clip-cell">
                     <span className="clip-name">{c.label}</span>
                     <small className="clip-site">{(c.real ? 'real · ' : 'synthetic · ') + (r.fileName ?? '')}</small>
                   </td>
-                  <td><span className={`verdict small ${verdictClass(r)}`}>{verdictWord(r)}</span></td>
-                  <td className="num data">{speedText(r)}</td>
-                  <td className="data">
+                  <td data-label="Verdict"><span className={`verdict small ${verdictClass(r)}`}>{verdictWord(r)}</span></td>
+                  <td className="num data" data-label="Surface speed">{speedText(r)}</td>
+                  <td className="data" data-label="Direction">
                     {r.directionDegrees != null ? (
                       <>
                         <svg className="dir" viewBox="0 0 20 20" aria-hidden="true">
@@ -65,8 +65,8 @@ export function ReadingsView({ clips, onOpen }: { clips: Clip[]; onOpen: (key: s
                       </>
                     ) : '—'}
                   </td>
-                  <td className="num data">{num(r.waterTracksMedian, 0)} / {num(r.backgroundTracksMedian, 0)}</td>
-                  <td className="num data">{r.pairsUsed} / {r.pairsTotal}</td>
+                  <td className="num data" data-label="Points, water / bank">{num(r.waterTracksMedian, 0)} / {num(r.backgroundTracksMedian, 0)}</td>
+                  <td className="num data" data-label="Camera steady pairs">{r.pairsUsed} / {r.pairsTotal}</td>
                   <td className="why">{r.reason}</td>
                 </tr>
               )

@@ -44,7 +44,14 @@
       "verdict": "MOVING",
       "videoSha256": "0f6dc154057dc464965ce015d1600e2501a988da681b89c970be59c0bfe513a8",
       "waterTracksMedian": 203.5,
-      "width": 1920
+      "width": 1920,
+      "anchor": {
+        "fingerprint": "206572a8ce1afc34cdec1bb724691db29aa295b2553db057d691a875132a198a",
+        "locator": "did:dkg:context-graph:0x5Ea07Ffddc58Dd261102746E6651747E18429dbe/slackwater/_working_memory/0x5ea07ffddc58dd261102746e6651747e18429dbe/20",
+        "ual": "",
+        "tx": "",
+        "anchoredAt": "2026-10-04T18:34:18.558538900Z"
+      }
     }
   },
   {
@@ -92,7 +99,14 @@
       "verdict": "MOVING",
       "videoSha256": "e1bac0685b9b4bba1710eb7bba2abff615ea13066fe2813595461842d1c1b370",
       "waterTracksMedian": 246,
-      "width": 1016
+      "width": 1016,
+      "anchor": {
+        "fingerprint": "ef2b9453e972b6348c28356988999e62f1103db41e845934ba69806b712819b2",
+        "locator": "did:dkg:context-graph:0x5Ea07Ffddc58Dd261102746E6651747E18429dbe/slackwater/_working_memory/0x5ea07ffddc58dd261102746e6651747e18429dbe/19",
+        "ual": "did:dkg:base:84532/0x5ea07ffddc58dd261102746e6651747e18429dbe/19",
+        "tx": "0x6add93ab6a75a14d78e5074753eed2b4bc8e934f8f5f18d6865d008121ccb521",
+        "anchoredAt": "2026-10-04T18:33:44.158206500Z"
+      }
     }
   },
   {
@@ -140,7 +154,14 @@
       "verdict": "REFUSED",
       "videoSha256": "e1bac0685b9b4bba1710eb7bba2abff615ea13066fe2813595461842d1c1b370",
       "waterTracksMedian": 227,
-      "width": 1016
+      "width": 1016,
+      "anchor": {
+        "fingerprint": "813f93f26818ee369ac7fd91b8a25e60d4ae63c4f57c5327aabe5f3b5ceb1662",
+        "locator": "did:dkg:context-graph:0x5Ea07Ffddc58Dd261102746E6651747E18429dbe/slackwater/_working_memory/0x5ea07ffddc58dd261102746e6651747e18429dbe/21",
+        "ual": "",
+        "tx": "",
+        "anchoredAt": "2026-10-04T18:34:26.184397500Z"
+      }
     }
   }
 ]

@@ -1,5 +1,19 @@
 # Deploying SlackWater
 
+## 0. The demo site, with no server (Vercel)
+
+The page runs on its own: with no engine behind it, it shows the saved Geul readings, the 3D views (their points
+ship in `frontend/public/points/`) and the on-chain record, and says plainly that measuring uploads needs the engine.
+
+On vercel.com: **Add New → Project →** import `sidharthnair7/SlackWater`, set **Root Directory** to `frontend`,
+keep the Vite defaults (build `npm run build`, output `dist`), and deploy. Every push redeploys it.
+
+Checked on 2026-10-04: a clean `npm ci && npm run build` inside `frontend/` alone works, and the built page served
+by a plain static server plays the flood clip, loads all 45,000 discs and shows the Basescan link.
+
+The full app (uploads measured live) needs the engine, below. Docker Desktop on Sid's laptop can't start because
+the CPU's virtualisation is off; the server build in step 2 doesn't need it.
+
 The app is one Docker image: the Spring Boot server, the page, and the real clips it measures on startup.
 Readings live in memory, so every restart re-measures the clips in `clips/seed.csv` and the site is never empty.
 

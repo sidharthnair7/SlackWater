@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import type { Clip, Ledger, Reading, Region } from './types'
 import { SNAPSHOT, TEST_CLIPS } from './data/clips'
 import { clipFromReading, fetchLedger, fetchReadings, measureClip } from './api'
@@ -64,6 +64,9 @@ export function App() {
   // The video the 3D field should open on, when it's opened from that video's analysis.
   const [fieldFocus, setFieldFocus] = useState<string | null>(null)
   const run = useRef(0)
+  // One highlight that slides to whichever tab the cursor is over, and back to this page's tab after.
+  const navRef = useRef<HTMLElement>(null)
+  const [glider, setGlider] = useState<{ left: number; width: number } | null>(null)
   const pickedByUser = useRef(false)
 
   const clips = useMemo(() => [...real, ...TEST_CLIPS], [real])
@@ -74,6 +77,24 @@ export function App() {
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
+
+  const glideTo = useCallback((el: Element | null | undefined) => {
+    if (!(el instanceof HTMLElement)) return setGlider(null)
+    setGlider({ left: el.offsetLeft, width: el.offsetWidth })
+  }, [])
+  const glideHome = useCallback(() => glideTo(navRef.current?.querySelector('[aria-current="page"]')), [glideTo])
+
+  // Back on this page's tab whenever the page, the bar's size or the window changes. The bar folds over 0.45 s,
+  // so measure again once it has settled.
+  useLayoutEffect(() => {
+    glideHome()
+    const settle = setTimeout(glideHome, 480)
+    window.addEventListener('resize', glideHome)
+    return () => {
+      clearTimeout(settle)
+      window.removeEventListener('resize', glideHome)
+    }
+  }, [view, condensed, glideHome])
 
   useEffect(() => {
     // Two thresholds, so the bar doesn't flicker when the page rests right at the edge.
@@ -153,7 +174,7 @@ export function App() {
     setSelected('')
     setRegion(OWN_REGION)
     setReadout({ kind: 'own-ready', fileName: file.name, sizeMb: file.size / 1e6 })
-    setHint(live ? '' : "The engine isn't reachable from this page. Start the server and open the page from it.")
+    setHint(live ? '' : "This demo page has no engine behind it, so it can't measure uploads. Run SlackWater from the GitHub repo (one command) to measure your own clip.")
   }
 
   async function measureOwn() {
@@ -230,7 +251,7 @@ export function App() {
     ? waiting
       ? "Connected. The engine is measuring the Geul clips; they'll appear in a few seconds."
       : 'Connected to engine 0.2.0. Every reading below was measured by the engine running behind this page.'
-    : "Showing a saved snapshot of engine 0.2.0's readings. Start the server to measure your own clips."
+    : "Demo mode: real readings saved from engine 0.2.0. Measuring your own clip needs the engine, which runs from the GitHub repo with one command."
 
   return (
     <>
@@ -251,9 +272,14 @@ export function App() {
           </svg>
           <span className="brand-name">SlackWater</span>
         </a>
-        <nav className="tabs" aria-label="Sections">
+        <nav className="tabs" aria-label="Sections" ref={navRef} onMouseLeave={glideHome}>
+          {glider && <span className="tab-glider" aria-hidden="true" style={{ transform: `translateX(${glider.left}px)`, width: glider.width }} />}
           {(['home', 'measure', 'readings', 'field', 'method'] as View[]).map((v) => (
-            <a key={v} href={`#${v}`} aria-current={view === v ? 'page' : undefined} onClick={() => v === 'field' && setFieldFocus(null)}>
+            <a key={v} href={`#${v}`} aria-current={view === v ? 'page' : undefined}
+              onMouseEnter={(e) => glideTo(e.currentTarget)}
+              onFocus={(e) => glideTo(e.currentTarget)}
+              onBlur={glideHome}
+              onClick={() => v === 'field' && setFieldFocus(null)}>
               {TAB_LABELS[v]}
             </a>
           ))}

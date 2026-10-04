@@ -132,8 +132,7 @@ button, input { font: inherit; color: inherit; }
 }
 .topbar.is-condensed .engine-tag { display: none; }
 .topbar-end { display: flex; align-items: center; justify-content: flex-end; gap: 16px; min-width: 0; }
-.topbar.is-condensed .tabs a { border-bottom-color: transparent; border-radius: 999px; }
-.topbar.is-condensed .tabs a[aria-current="page"] { background: color-mix(in srgb, var(--water) 10%, transparent); color: var(--water); }
+.topbar.is-condensed .tabs a[aria-current="page"] { color: var(--water); }
 .topbar-cta {
   display: inline-flex;
   align-items: center;
@@ -164,18 +163,34 @@ button, input { font: inherit; color: inherit; }
   font-size: var(--step-1);
   letter-spacing: -0.01em;
 }
-.tabs { display: flex; gap: 4px; justify-self: center; scrollbar-width: none; }
+.tabs { position: relative; display: flex; gap: 4px; justify-self: center; scrollbar-width: none; }
 .tabs::-webkit-scrollbar { display: none; }
 .tabs a {
+  position: relative;
+  z-index: 1;
   white-space: nowrap;
   padding: 6px 10px;
   color: var(--muted);
   text-decoration: none;
   font-weight: 500;
-  border-bottom: 2px solid transparent;
+  border-radius: 999px;
 }
 .tabs a:hover { color: var(--ink); }
-.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); }
+/* The sliding highlight: a soft pill behind the tab under the cursor, or under this page's tab. */
+.tab-glider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--water) 11%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--water) 18%, transparent);
+  transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) { .tab-glider { transition: none; } }
 .engine-tag {
   font-family: var(--data);
   font-size: var(--step--1);
@@ -795,3 +810,14 @@ td.data, .data { font-family: var(--data); font-size: 0.75rem; font-variant-nume
 .work-guide.is-own { border-left-color: var(--water); background: color-mix(in srgb, var(--water) 6%, var(--panel)); }
 .switch-clips { border-top: 1px solid var(--rule); padding-top: 12px; }
 .switch-clips .samples { border-top: 0; padding-top: 10px; }
+
+/* Readings on a phone: each row becomes a card, every value labelled. */
+@media (max-width: 700px) {
+  .readings thead { display: none; }
+  .readings, .readings tbody, .readings tr, .readings td { display: block; width: 100%; }
+  .readings tr { margin-bottom: 10px; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); }
+  .readings td { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 4px 0; border: 0; text-align: right; }
+  .readings td[data-label]::before { content: attr(data-label); flex: none; font-family: var(--body); font-size: 0.75rem; color: var(--muted); text-align: left; }
+  .readings td.clip-cell { display: block; padding-bottom: 8px; margin-bottom: 4px; border-bottom: 1px solid var(--rule); text-align: left; }
+  .readings td.why { display: block; padding-top: 8px; text-align: left; color: var(--muted); }
+}
