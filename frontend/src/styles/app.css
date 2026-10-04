@@ -51,6 +51,20 @@ button, input { font: inherit; color: inherit; }
 
 [hidden] { display: none !important; }
 
+/* Scrollbars in the page's colours: a river-blue thumb on the paper. */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0d6a85, #20807c 55%, #2f7a55);
+  border: 3px solid var(--paper);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: #0d6a85; }
+::-webkit-scrollbar-corner { background: var(--paper); }
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: #20807c var(--paper); scrollbar-width: thin; }
+}
+
 /* ---------- chrome ---------- */
 
 .notice {

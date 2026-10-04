@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import type { Clip } from '../types'
 import { num, pct, shortHash } from '../lib/format'
+import { BoxDiagram } from './BoxDiagram'
 import { FlowField } from './FlowField'
 import { Counter, GateTicker, Reveal } from './Motion'
 import './landing.css'
@@ -97,6 +98,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
                   <video
                     ref={videoRef}
                     src={camera.video ?? undefined}
+                    poster="/img/geul-poster.jpg"
                     muted
                     loop
                     playsInline
@@ -202,27 +204,67 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
         <div className="lp-wrap">
           <Reveal>
             <p className="lp-kicker">Refusing is a result</p>
-            <h2 className="lp-h2">When it can’t tell, it says so.</h2>
+            <h2 className="lp-h2">When it can’t be sure, it says so, and tells you how to fix it.</h2>
             <p className="lp-body lp-narrow">
-              The first version of the engine called the right-hand clip still. It was wrong: the box left part of the
-              river outside it, so moving water was mistaken for background noise. Now that clip is refused, with the
-              fix in plain words. Our first real clip found a way the tool could fool itself.
+              Before measuring, you draw a box around the water. Everything outside the box should stay still: the
+              banks, stones, a fence post. SlackWater watches those to check the phone didn’t move. If something out
+              there is moving, it can’t trust the clip, so it won’t give a number.
             </p>
           </Reveal>
           <div className="lp-evidence">
-            {topDown?.evidence && (
-              <Reveal className="lp-ev">
-                <img src={topDown.evidence} alt="Evidence frame: arrows over the whole river, measured moving" loading="lazy" />
-                <p><span className="lp-tag is-moving">Moving</span> Box over all the water: {num(mps, 2)} m/s.</p>
-              </Reveal>
-            )}
-            {refused?.evidence && (
-              <Reveal delay={0.1} className="lp-ev">
-                <img src={refused.evidence} alt="Evidence frame: box drawn too small, refused" loading="lazy" />
-                <p><span className="lp-tag is-refused">Refused</span> {refused.reading.reason}</p>
-              </Reveal>
-            )}
+            <Reveal className="lp-ev">
+              <BoxDiagram box="all" />
+              <div className="lp-ev-copy">
+                <p className="lp-ev-title"><span className="lp-ev-num">1</span> Box over all the water</p>
+                <p><span className="lp-tag is-moving">Moving · {num(mps, 2)} m/s</span></p>
+                <p>Only the banks are outside the box, and they stay still. So the phone was steady and the speed counts. It reports:</p>
+                <blockquote className="lp-says is-moving">“Moving. Surface speed {num(mps, 2)} m/s.” In the citizen app’s terms, that’s Fast.</blockquote>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1} className="lp-ev">
+              <BoxDiagram box="part" />
+              <div className="lp-ev-copy">
+                <p className="lp-ev-title"><span className="lp-ev-num">2</span> Box over part of the water</p>
+                <p><span className="lp-tag is-refused">Refused · no number</span></p>
+                <p>Moving water was left outside the box. Now it can’t tell real flow from a shaky phone, so it stops and says:</p>
+                <blockquote className="lp-says">“{refused?.reading.reason ?? 'Things outside the water box are moving, like more water or plants in the wind, so we can’t tell real motion from noise. Draw the box over all of the water.'}”</blockquote>
+              </div>
+            </Reveal>
           </div>
+          <ul className="lp-legend" aria-label="What the drawing shows">
+            <li><span className="lp-key is-box" aria-hidden="true" /> the box you draw</li>
+            <li><span className="lp-key is-in" aria-hidden="true" /> water it measures</li>
+            <li><span className="lp-key is-out" aria-hidden="true" /> movement outside the box</li>
+            <li><span className="lp-key is-still" aria-hidden="true">+</span> still points on the bank</li>
+          </ul>
+          <p className="lp-small">
+            Both drawings are a real case: the same flood clip, measured once with each box. Our first version got the
+            second one wrong and called a flood still. This check exists because of it.
+          </p>
+          {(topDown?.evidence || refused?.evidence) && (
+            <details className="lp-real">
+              <summary>See the real frames the engine drew</summary>
+              <p className="lp-small">
+                The Geul in flood, seen from above. The black corner is outside the camera’s view. Blue arrows are water
+                it measured. Orange arrows are movement outside the box. White crosses are points on the banks. In the
+                refused frame the water inside the box shows as dots: it stopped before measuring them.
+              </p>
+              <div className="lp-real-grid">
+                {topDown?.evidence && (
+                  <figure>
+                    <img src={topDown.evidence} alt="Real frame: box over all the water, blue arrows across the river" loading="lazy" />
+                    <figcaption><span className="lp-tag is-moving">1 · Moving</span></figcaption>
+                  </figure>
+                )}
+                {refused?.evidence && (
+                  <figure>
+                    <img src={refused.evidence} alt="Real frame: box over part of the water, orange arrows on the water left outside it" loading="lazy" />
+                    <figcaption><span className="lp-tag is-refused">2 · Refused</span></figcaption>
+                  </figure>
+                )}
+              </div>
+            </details>
+          )}
         </div>
       </section>
 

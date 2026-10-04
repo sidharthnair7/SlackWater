@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 /*
  * The hero's background: hundreds of points drifting downstream through a smooth flow field, leaving fading
  * trails, the same picture the engine draws of a moving surface. The cursor pushes them aside like a stone in a
- * stream. Pauses when off screen; draws one still frame for people who prefer reduced motion.
+ * stream: they curl around it and light up, moving it leaves ripples, and a click drops a stone.
+ * Pauses when off screen; draws one still frame for people who prefer reduced motion.
  */
 
 const INKS = ['rgba(13,106,133,', 'rgba(32,128,124,', 'rgba(74,125,58,', 'rgba(13,106,133,']
@@ -30,6 +31,10 @@ export function FlowField({ paper = '241,244,243' }: { paper?: string }) {
     let t = 0
     let visible = true
     const mouse = { x: -9999, y: -9999 }
+    // Rings spreading out from the cursor, like the surface after a stone goes in.
+    const ripples: { x: number; y: number; r: number; a: number }[] = []
+    let lastRipple = { x: -9999, y: -9999, at: 0 }
+    const RADIUS = 200
 
     const spawn = (fromEdge: boolean): Particle => ({
       x: fromEdge ? -10 - Math.random() * 60 : Math.random() * width,
@@ -73,16 +78,18 @@ export function FlowField({ paper = '241,244,243' }: { paper?: string }) {
         const dx = p.x - mouse.x
         const dy = p.y - mouse.y
         const d2 = dx * dx + dy * dy
-        if (d2 < 140 * 140) {
+        let near = 0
+        if (d2 < RADIUS * RADIUS) {
           const d = Math.sqrt(d2) || 1
-          const push = (1 - d / 140) * 2.4
-          vx += (dx / d) * push
-          vy += (dy / d) * push
+          near = 1 - d / RADIUS
+          // Pushed away and swirled around, the way water parts around a stone.
+          vx += (dx / d) * near * 3.4 + (-dy / d) * near * 2.2
+          vy += (dy / d) * near * 3.4 + (dx / d) * near * 2.2
         }
         const nx = p.x + vx
         const ny = p.y + vy
-        g.strokeStyle = p.ink + '0.55)'
-        g.lineWidth = p.width
+        g.strokeStyle = p.ink + (0.55 + near * 0.4).toFixed(2) + ')'
+        g.lineWidth = p.width + near * 1.2
         g.beginPath()
         g.moveTo(p.x, p.y)
         g.lineTo(nx, ny)
@@ -92,6 +99,25 @@ export function FlowField({ paper = '241,244,243' }: { paper?: string }) {
         p.life -= 1
         if (p.life <= 0 || p.x > width + 20 || p.y < -20 || p.y > height + 20) particles[i] = spawn(p.x > width + 20)
       }
+      for (let i = ripples.length - 1; i >= 0; i--) {
+        const ring = ripples[i]
+        ring.r += 1.9
+        ring.a *= 0.955
+        if (ring.a < 0.02) {
+          ripples.splice(i, 1)
+          continue
+        }
+        g.strokeStyle = `rgba(13,106,133,${ring.a.toFixed(3)})`
+        g.lineWidth = 1.3
+        g.beginPath()
+        g.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2)
+        g.stroke()
+      }
+    }
+
+    const ripple = (x: number, y: number, strength: number) => {
+      ripples.push({ x, y, r: 4, a: strength })
+      if (ripples.length > 14) ripples.shift()
     }
 
     const loop = () => {
@@ -110,11 +136,27 @@ export function FlowField({ paper = '241,244,243' }: { paper?: string }) {
       const rect = canvas.getBoundingClientRect()
       mouse.x = e.clientX - rect.left
       mouse.y = e.clientY - rect.top
+      const now = performance.now()
+      const moved = Math.hypot(mouse.x - lastRipple.x, mouse.y - lastRipple.y)
+      if (moved > 36 && now - lastRipple.at > 110 && mouse.y >= 0 && mouse.y <= height) {
+        ripple(mouse.x, mouse.y, 0.32)
+        lastRipple = { x: mouse.x, y: mouse.y, at: now }
+      }
+    }
+    // A click drops a stone: two rings, stronger.
+    const onDown = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const x = e.clientX - rect.left
+      const y = e.clientY - rect.top
+      if (y < 0 || y > height) return
+      ripple(x, y, 0.7)
+      setTimeout(() => ripple(x, y, 0.45), 140)
     }
     const onLeave = () => {
       mouse.x = mouse.y = -9999
     }
     window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerdown', onDown)
     document.addEventListener('pointerleave', onLeave)
 
     if (reduce) {
@@ -127,6 +169,7 @@ export function FlowField({ paper = '241,244,243' }: { paper?: string }) {
       ro.disconnect()
       io.disconnect()
       window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerdown', onDown)
       document.removeEventListener('pointerleave', onLeave)
     }
   }, [paper])
