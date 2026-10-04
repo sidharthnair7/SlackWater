@@ -7,6 +7,7 @@ COPY .mvn .mvn
 RUN rm -f .mvn/maven.config && chmod +x mvnw \
     && ./mvnw -q -B -Djavacpp.platform=linux-x86_64 dependency:go-offline
 COPY src src
+COPY frontend frontend
 RUN ./mvnw -q -B -Djavacpp.platform=linux-x86_64 -DskipTests package
 
 FROM eclipse-temurin:25-jre

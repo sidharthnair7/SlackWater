@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1240" width="1600" height="1240" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+  <title>SlackWater: one measurement, step by step</title>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#36464b"/>
+    </marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#0d6a85"/>
+    </marker>
+    <style>
+      .bg { fill: #f6f8f7; }
+      .lane { fill: #ffffff; stroke: #c7d1d0; stroke-width: 1.5; }
+      .life { stroke: #b9c5c4; stroke-width: 1.5; stroke-dasharray: 5 6; }
+      .h1 { font-size: 30px; font-weight: 700; fill: #111a1c; }
+      .sub { font-size: 15px; fill: #5a6a6d; }
+      .lt { font-size: 16px; font-weight: 700; fill: #111a1c; }
+      .ls { font-size: 12.5px; fill: #5a6a6d; }
+      .call { stroke: #36464b; stroke-width: 1.6; fill: none; }
+      .back { stroke: #0d6a85; stroke-width: 1.6; fill: none; stroke-dasharray: 7 5; }
+      .t { font-size: 14px; fill: #1f2a2d; }
+      .tb { font-size: 14px; fill: #0d6a85; }
+      .m { font-size: 13px; fill: #1f2a2d; font-family: Consolas, 'Cascadia Mono', monospace; }
+      .n { font-size: 12px; font-weight: 700; fill: #ffffff; }
+      .dot { fill: #111a1c; }
+      .note { fill: #fffaea; stroke: #e0c56a; stroke-width: 1.2; }
+      .notet { font-size: 13.5px; fill: #3a3320; }
+      .h2 { font-size: 19px; font-weight: 700; fill: #111a1c; }
+      .box { fill: #ffffff; stroke: #c7d1d0; stroke-width: 1.5; }
+      .small { font-size: 12.5px; fill: #5a6a6d; }
+    </style>
+  </defs>
+
+  <rect class="bg" width="1600" height="1240"/>
+  <text x="40" y="58" class="h1">One measurement, step by step</text>
+  <text x="40" y="86" class="sub">What happens when you upload your own clip. Solid arrows are requests, dashed blue arrows are answers coming back.</text>
+
+  <!-- Lanes -->
+  <rect class="lane" x="50" y="110" width="160" height="58" rx="6"/>
+  <text x="130" y="135" class="lt" text-anchor="middle">You</text>
+  <text x="130" y="155" class="ls" text-anchor="middle">with a phone clip</text>
+
+  <rect class="lane" x="320" y="110" width="200" height="58" rx="6"/>
+  <text x="420" y="135" class="lt" text-anchor="middle">The page</text>
+  <text x="420" y="155" class="ls" text-anchor="middle">browser · app.js, scene.js</text>
+
+  <rect class="lane" x="630" y="110" width="220" height="58" rx="6"/>
+  <text x="740" y="135" class="lt" text-anchor="middle">Server</text>
+  <text x="740" y="155" class="ls" text-anchor="middle">ReadingController + Service</text>
+
+  <rect class="lane" x="960" y="110" width="200" height="58" rx="6"/>
+  <text x="1060" y="135" class="lt" text-anchor="middle">Engine</text>
+  <text x="1060" y="155" class="ls" text-anchor="middle">FlowAnalyzer + JavaCV</text>
+
+  <rect class="lane" x="1300" y="110" width="200" height="58" rx="6"/>
+  <text x="1400" y="135" class="lt" text-anchor="middle">Database</text>
+  <text x="1400" y="155" class="ls" text-anchor="middle">H2, in memory</text>
+
+  <line class="life" x1="130" y1="168" x2="130" y2="930"/>
+  <line class="life" x1="420" y1="168" x2="420" y2="930"/>
+  <line class="life" x1="740" y1="168" x2="740" y2="930"/>
+  <line class="life" x1="1060" y1="168" x2="1060" y2="930"/>
+  <line class="life" x1="1400" y1="168" x2="1400" y2="930"/>
+
+  <!-- 1 -->
+  <circle cx="34" cy="206" r="11" class="dot"/><text x="34" y="210" class="n" text-anchor="middle">1</text>
+  <line class="call" x1="130" y1="210" x2="418" y2="210" marker-end="url(#a)"/>
+  <text x="142" y="200" class="t">pick a clip: it plays here, nothing uploaded yet</text>
+
+  <!-- 2 -->
+  <circle cx="34" cy="256" r="11" class="dot"/><text x="34" y="260" class="n" text-anchor="middle">2</text>
+  <line class="call" x1="130" y1="260" x2="418" y2="260" marker-end="url(#a)"/>
+  <text x="142" y="250" class="t">drag the water box over all the water</text>
+  <text x="440" y="264" class="small">kept as fractions of the frame (0 to 1)</text>
+
+  <!-- 3 -->
+  <circle cx="34" cy="306" r="11" class="dot"/><text x="34" y="310" class="n" text-anchor="middle">3</text>
+  <line class="call" x1="130" y1="310" x2="418" y2="310" marker-end="url(#a)"/>
+  <text x="142" y="300" class="t">press Measure (optional: place, scale)</text>
+
+  <!-- 4 -->
+  <circle cx="34" cy="356" r="11" class="dot"/><text x="34" y="360" class="n" text-anchor="middle">4</text>
+  <line class="call" x1="420" y1="360" x2="738" y2="360" marker-end="url(#a)"/>
+  <text x="432" y="350" class="m">POST /api/readings</text>
+  <text x="432" y="378" class="small">video + regionX, regionY, regionWidth, regionHeight</text>
+
+  <!-- 5 -->
+  <circle cx="34" cy="416" r="11" class="dot"/><text x="34" y="420" class="n" text-anchor="middle">5</text>
+  <rect class="note" x="752" y="396" width="290" height="46" rx="4"/>
+  <text x="764" y="415" class="notet">box outside the frame? → 400 + reason</text>
+  <text x="764" y="434" class="notet">else: save to a temp file, SHA-256 it</text>
+
+  <!-- 6 -->
+  <circle cx="34" cy="476" r="11" class="dot"/><text x="34" y="480" class="n" text-anchor="middle">6</text>
+  <line class="call" x1="740" y1="480" x2="1058" y2="480" marker-end="url(#a)"/>
+  <text x="752" y="470" class="m">analyze(frames, settings)</text>
+
+  <!-- 7 -->
+  <circle cx="34" cy="556" r="11" class="dot"/><text x="34" y="560" class="n" text-anchor="middle">7</text>
+  <rect class="note" x="1072" y="500" width="470" height="122" rx="4"/>
+  <text x="1084" y="522" class="notet">grey frames, ≤ 640 px · pairs 0.1 s apart</text>
+  <text x="1084" y="542" class="notet">find corners in the water box and on the banks</text>
+  <text x="1084" y="562" class="notet">follow them forward and back (Lucas-Kanade)</text>
+  <text x="1084" y="582" class="notet">banks moved? drop the pair · subtract small shifts</text>
+  <text x="1084" y="602" class="notet">gates 1 to 6 → STILL / MOVING / REFUSED + why</text>
+
+  <!-- 8 -->
+  <circle cx="34" cy="656" r="11" class="dot"/><text x="34" y="660" class="n" text-anchor="middle">8</text>
+  <line class="back" x1="1060" y1="660" x2="742" y2="660" marker-end="url(#b)"/>
+  <text x="772" y="650" class="tb">verdict, reason, gate values, evidence PNGs</text>
+
+  <!-- 9 -->
+  <circle cx="34" cy="706" r="11" class="dot"/><text x="34" y="710" class="n" text-anchor="middle">9</text>
+  <line class="call" x1="740" y1="710" x2="1398" y2="710" marker-end="url(#a)"/>
+  <text x="1100" y="700" class="t">save the Reading with its fingerprint</text>
+  <text x="1100" y="728" class="small">SHA-256(video hash + settings + engine version)</text>
+
+  <!-- 10 -->
+  <circle cx="34" cy="766" r="11" class="dot"/><text x="34" y="770" class="n" text-anchor="middle">10</text>
+  <rect class="note" x="752" y="752" width="250" height="30" rx="4"/>
+  <text x="764" y="772" class="notet">delete the video: only the hash stays</text>
+
+  <!-- 11 -->
+  <circle cx="34" cy="816" r="11" class="dot"/><text x="34" y="820" class="n" text-anchor="middle">11</text>
+  <line class="back" x1="740" y1="820" x2="422" y2="820" marker-end="url(#b)"/>
+  <text x="432" y="810" class="tb">201 · the reading as JSON</text>
+  <text x="432" y="838" class="small">then GET …/overlay.png for the arrows</text>
+
+  <!-- 12 -->
+  <circle cx="34" cy="876" r="11" class="dot"/><text x="34" y="880" class="n" text-anchor="middle">12</text>
+  <line class="back" x1="420" y1="880" x2="132" y2="880" marker-end="url(#b)"/>
+  <text x="142" y="870" class="tb">verdict, gates, the app's own answer, record</text>
+  <text x="142" y="898" class="small">your clip replays with the engine's arrows on it</text>
+
+  <!-- 13 -->
+  <circle cx="34" cy="926" r="11" class="dot"/><text x="34" y="930" class="n" text-anchor="middle">13</text>
+  <text x="56" y="931" class="t">Any time later: <tspan class="m">GET /api/readings/{id}/fhir</tspan> gives the same reading as a FHIR Observation in OneAquaHealth's profile (#hydrology), ready for their systems.</text>
+
+  <!-- Other flows -->
+  <text x="40" y="992" class="h2">The two other flows</text>
+
+  <rect class="box" x="40" y="1010" width="740" height="190" rx="6"/>
+  <text x="60" y="1040" class="lt">When the server starts</text>
+  <text x="60" y="1068" class="t">1  SeedReadings sees an empty database (it lives in memory, so every start is empty)</text>
+  <text x="60" y="1092" class="t">2  measures each clip in <tspan class="m">clips/seed.csv</tspan> through the same service: the Geul flood</text>
+  <text x="60" y="1116" class="t">3  the page asks <tspan class="m">GET /api/readings</tspan>; while the list is empty it keeps the</text>
+  <text x="80" y="1136" class="t">saved snapshot on screen and asks again every 2 seconds</text>
+  <text x="60" y="1160" class="t">4  readings arrive: badge says LIVE, the camera view plays with its arrows</text>
+  <text x="60" y="1186" class="small">Result: a judge opening the link days later always sees real readings from the running engine.</text>
+
+  <rect class="box" x="820" y="1010" width="740" height="190" rx="6"/>
+  <text x="840" y="1040" class="lt">Scoring the engine (Trini's part)</text>
+  <text x="840" y="1068" class="t">1  Trini labels 15 to 20 Commons clips still / moving / can't tell,</text>
+  <text x="860" y="1088" class="t">before anything runs on them (the page measures nothing offline)</text>
+  <text x="840" y="1112" class="t">2  the labels go in <tspan class="m">clips/labels.csv</tspan>, the clips in <tspan class="m">clips/commons/</tspan></text>
+  <text x="840" y="1136" class="m">3  ./mvnw test -Dtest=LabelledClipsScoreTest</text>
+  <text x="840" y="1160" class="t">4  <tspan class="m">clips/score.md</tspan>: Right · Wrong · Refused, out of n</text>
+  <text x="840" y="1186" class="small">A refusal is its own column, not "wrong": refusing is the tool doing its job.</text>
+</svg>

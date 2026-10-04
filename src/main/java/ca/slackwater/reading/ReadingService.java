@@ -37,12 +37,17 @@ public class ReadingService {
     /** @param clipPath where the original stays under clips/, so the page can play it; null for uploads */
     public Reading measure(Path video, String fileName, String clipPath, AnalysisSettings settings, Site site)
             throws IOException {
+        return repository.save(prepare(video, fileName, clipPath, settings, site));
+    }
+
+    /** Measures a clip into a Reading without saving it, then deletes the clip. */
+    Reading prepare(Path video, String fileName, String clipPath, AnalysisSettings settings, Site site)
+            throws IOException {
         try {
             String videoSha256 = Fingerprint.ofFile(video);
             AnalysisResult result = analyze(video, settings);
-            Reading reading = Reading.of(result, site, fileName, clipPath, videoSha256, settings.canonical(),
+            return Reading.of(result, site, fileName, clipPath, videoSha256, settings.canonical(),
                     FlowAnalyzer.ENGINE_VERSION);
-            return repository.save(reading);
         } finally {
             Files.deleteIfExists(video);
         }

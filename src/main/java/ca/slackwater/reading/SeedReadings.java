@@ -53,14 +53,21 @@ public class SeedReadings implements ApplicationRunner {
                 rows.add(line.split(",", -1));
             }
         }
-        // The list shows newest first, so save the last row first.
+        // The list shows newest first, so measure the last row first. Everything is saved in one go at the end,
+        // so a page that loads while seeding is under way sees no readings (and waits) rather than some of them.
         Collections.reverse(rows);
+        List<Reading> readings = new ArrayList<>();
         for (String[] row : rows) {
-            seed(row);
+            Reading reading = measure(row);
+            if (reading != null) {
+                readings.add(reading);
+            }
         }
+        repository.saveAll(readings);
+        log.info("Seeded {} readings", readings.size());
     }
 
-    private void seed(String[] row) {
+    private Reading measure(String[] row) {
         Path clip = clipsDir.resolve(row[0].trim());
         try {
             Region region = new Region(Double.parseDouble(row[1]), Double.parseDouble(row[2]),
@@ -69,11 +76,13 @@ public class SeedReadings implements ApplicationRunner {
             // The service deletes what it measures, so give it a copy.
             Path copy = Files.createTempFile("slackwater-seed-", ".video");
             Files.copy(clip, copy, StandardCopyOption.REPLACE_EXISTING);
-            Reading reading = service.measure(copy, clip.getFileName().toString(), row[0].trim(),
+            Reading reading = service.prepare(copy, clip.getFileName().toString(), row[0].trim(),
                     new AnalysisSettings(region, scale), new Site(row[6].trim(), null, null));
-            log.info("Seeded {}: {}", clip.getFileName(), reading.getVerdict());
+            log.info("Measured {}: {}", clip.getFileName(), reading.getVerdict());
+            return reading;
         } catch (Exception e) {
             log.warn("Could not seed {}: {}", clip, e.getMessage());
+            return null;
         }
     }
 }

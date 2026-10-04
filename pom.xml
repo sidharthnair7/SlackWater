@@ -84,6 +84,19 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- The page lives in frontend/ at the top of the repo; it's packaged where Spring serves static files. -->
+            <resource>
+                <directory>frontend</directory>
+                <targetPath>static</targetPath>
+                <excludes>
+                    <exclude>README.md</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
