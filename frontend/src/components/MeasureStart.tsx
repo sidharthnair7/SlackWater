@@ -35,6 +35,9 @@ function summary(c: Clip): string {
  */
 export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
   const [dragging, setDragging] = useState(false)
+  // The flood clips are the samples, not whatever was uploaded last.
+  const geul = real.filter((c) => (c.reading.siteName ?? '').startsWith('Geul'))
+  const samples = (geul.length >= 3 ? geul : real).slice(0, 3)
   const [filming, setFilming] = useState(false)
   const [canFilm] = useState(liveCameraAvailable)
   // On a phone, the same picker offers the camera, so say so: film right here, no app needed.
@@ -105,7 +108,7 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
 
         <div className="start-samples">
           <p className="start-label">No clip with you? Try a real one.</p>
-          {real.slice(0, 3).map((c) => (
+          {samples.map((c) => (
             <button key={c.key} type="button" className="sample-card" onClick={() => onPick(c.key)}>
               <span className="sample-thumb">
                 <img src={c.video ? '/img/geul-poster.jpg' : c.evidence ?? '/img/geul-poster.jpg'} alt="" loading="lazy" />
