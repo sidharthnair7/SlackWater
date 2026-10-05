@@ -387,8 +387,10 @@ export function App() {
                 )}
                 <div className="stage-controls">
                   <div className="legend" aria-label="Legend">
-                    <span><i className="key key-water" />Point on the water</span>
-                    <span><i className="key key-bank" />Point on the bank</span>
+                    <span><i className="key key-water" />Water moving (each arrow is 0.4 s of motion)</span>
+                    <span><i className="key key-dot" />Water that stayed put</span>
+                    <span><i className="key key-bank" />Bank, holding still</span>
+                    <span><i className="key key-warn" />Moved outside the box: the phone, or water left outside it</span>
                     <span><i className="key key-box" />Water box: drag on the clip to redraw</span>
                   </div>
                   <label className="toggle" title={evidenceOnly ? "This clip's tracking is drawn on its evidence frame" : ''}>

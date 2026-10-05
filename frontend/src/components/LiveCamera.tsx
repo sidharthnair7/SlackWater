@@ -299,6 +299,12 @@ export function LiveCamera({ onRecorded, onClose }: Props) {
           <span className={'live-chip ' + (steady === 'steady' ? 'is-ok' : 'is-warn')}>{steadyText}</span>
           <span className={'live-chip ' + (water === 'moving' ? 'is-ok' : '')}>{waterText}</span>
         </div>
+        <ul className="live-legend" aria-label="What the marks mean">
+          <li><i style={{ background: '#4fd3f2' }} />water moving</li>
+          <li><i className="is-dot" />water still</li>
+          <li><i className="is-cross" />bank, holding still</li>
+          <li><i style={{ background: '#ffae45' }} />moved outside the box: the phone, or water outside it</li>
+        </ul>
         <p className="live-hint">Point it at a stream and drag on the picture to box all of the water. It measures motion in the box; it can't tell water from anything else.</p>
         {recording > 0 ? (
           <button type="button" className="live-rec-btn is-stop" disabled={recording < 3} onClick={() => recorderRef.current?.stop()}>

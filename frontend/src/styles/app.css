@@ -315,6 +315,14 @@ main {
 .key-bank::before { left: 3px; right: 3px; top: 4.5px; height: 1.5px; }
 .key-bank::after { top: 1px; bottom: 1px; left: 6.25px; width: 1.5px; }
 .key-box { border: 1.5px dashed #c99a12; height: 10px; }
+.key-warn::before { content: ""; position: absolute; left: 0; right: 3px; top: 4px; height: 2px; background: linear-gradient(90deg, transparent, #e08a12); }
+.key-warn::after { content: ""; position: absolute; right: 0; top: 2.5px; width: 5px; height: 5px; border-radius: 50%; background: #e08a12; }
+.key-dot::before { content: ""; position: absolute; left: 4px; top: 2px; width: 5px; height: 5px; border-radius: 50%; border: 1.5px solid var(--muted); }
+.live-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; margin: 0; padding: 0; list-style: none; font-size: 0.76rem; color: #c7d6d5; }
+.live-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.live-legend i { display: inline-block; width: 16px; height: 3px; border-radius: 2px; }
+.live-legend i.is-dot { width: 6px; height: 6px; border-radius: 50%; border: 1.5px solid #fff; background: transparent; }
+.live-legend i.is-cross { width: 9px; height: 9px; background: linear-gradient(#9fe0b4, #9fe0b4) center / 100% 2px no-repeat, linear-gradient(#9fe0b4, #9fe0b4) center / 2px 100% no-repeat; border-radius: 0; }
 
 .toggle { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; color: var(--ink); }
 .toggle input { accent-color: var(--water); width: 15px; height: 15px; margin: 0; }
