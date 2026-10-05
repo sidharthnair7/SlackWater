@@ -149,6 +149,7 @@ function ReadingView({ state, live, ledger, onReading }: {
       )}
       {done && <AppAnswer r={r} />}
       {done && <p className="reason">{r.reason}</p>}
+      {done && r.refusal && FIXES[r.refusal] && <p className="fix"><b>How to fix it:</b> {FIXES[r.refusal]}</p>}
       {done && r.note && <p className="note">{r.note}</p>}
       {!done && <Log lines={lines.slice(0, logShown)} />}
       <h2 className="block-title">Gates</h2>
@@ -162,6 +163,15 @@ function ReadingView({ state, live, ledger, onReading }: {
       )}
     </>
   )
+}
+
+/** The fix to try next, in plain words, for the refusals people hit most when filming by hand. */
+const FIXES: Record<string, string> = {
+  CAMERA_MOVED:
+    'this usually has one of two causes. The phone moved, or moving water was left outside your box (everything outside the box is treated as the bank). Rest the phone on a railing or a rock, and draw the box over all of the water.',
+  NO_FIXED_BACKGROUND: 'leave some bank, rocks or plants outside the box, and keep them in the shot.',
+  BACKGROUND_MOVING: 'draw the box over all of the water, so only the banks are left outside it.',
+  MIXED_DIRECTIONS: 'film when it is less windy, or draw the box over the main current only.',
 }
 
 function Figure({ r, progress }: { r: Reading; progress: number }) {

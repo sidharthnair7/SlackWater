@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { DragEvent } from 'react'
-import type { Clip } from '../types'
+import type { Clip, Region } from '../types'
+import { LiveCamera, liveCameraAvailable } from './LiveCamera'
 import { num, verdictClass, verdictWord } from '../lib/format'
 
 interface Props {
@@ -8,12 +9,12 @@ interface Props {
   tests: Clip[]
   live: boolean
   onPick: (key: string) => void
-  onOwnFile: (file: File) => void
+  onOwnFile: (file: File, region?: Region) => void
 }
 
 const STEPS = [
-  ['Film', '10 seconds of the stream. Hold the phone still and keep some bank in view.'],
-  ['Box the water', 'Drag a box over all of the water. The banks stay outside it.'],
+  ['Film', '10 seconds of the stream. Rest the phone on a railing or rock, and keep some bank in view.'],
+  ['Box the water', 'Drag a box over all of the water, not just part of it. The banks stay outside it.'],
   ['Get the answer', 'Still, moving and how fast, or a refusal that tells you what to fix.'],
 ]
 
@@ -34,6 +35,10 @@ function summary(c: Clip): string {
  */
 export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
   const [dragging, setDragging] = useState(false)
+  const [filming, setFilming] = useState(false)
+  const [canFilm] = useState(liveCameraAvailable)
+  // On a phone, the same picker offers the camera, so say so: film right here, no app needed.
+  const [phone] = useState(() => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches)
 
   const take = (files: FileList | null | undefined) => {
     const file = files?.[0]
@@ -73,6 +78,7 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
       </ol>
 
       <div className="start-grid">
+        <div className="start-left">
         <label className={'drop' + (dragging ? ' is-dragging' : '')}>
           <input type="file" accept="video/*" onChange={(e) => { take(e.target.files); e.target.value = '' }} />
           <svg className="drop-icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -80,13 +86,22 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
             <path d="M6 33c4 0 4 3 9 3s5-3 9-3 4 3 9 3 5-3 9-3" />
             <path d="M6 40c4 0 4 3 9 3s5-3 9-3 4 3 9 3 5-3 9-3" />
           </svg>
-          <span className="drop-title">Drop your clip here</span>
-          <span className="drop-sub">or <u>choose a video</u> · MP4 or MOV, up to 200 MB</span>
+          <span className="drop-title">{phone ? 'Film or choose a clip' : 'Drop your clip here'}</span>
+          <span className="drop-sub">
+            {phone ? <>Tap to <u>open your camera</u> or pick a video</> : <>or <u>choose a video</u></>} · MP4 or MOV, up to 200 MB
+          </span>
           <span className="drop-note">Your clip is measured, then deleted. Only its fingerprint is kept.</span>
           {!live && (
             <span className="drop-warn">This demo page has no engine behind it, so it can’t measure uploads. The samples are real readings. To measure your own clip, run SlackWater from the GitHub repo (one command).</span>
           )}
         </label>
+        {canFilm && (
+          <button type="button" className="live-open" onClick={() => setFilming(true)}>
+            <span className="live-open-dot" aria-hidden="true" />
+            <span><b>Film live with your camera</b><small>See the tracking and a steadiness check before you record</small></span>
+          </button>
+        )}
+        </div>
 
         <div className="start-samples">
           <p className="start-label">No clip with you? Try a real one.</p>
@@ -124,6 +139,15 @@ export function MeasureStart({ real, tests, live, onPick, onOwnFile }: Props) {
             ))}
           </div>
         </details>
+      )}
+      {filming && (
+        <LiveCamera
+          onClose={() => setFilming(false)}
+          onRecorded={(file, region) => {
+            setFilming(false)
+            onOwnFile(file, region)
+          }}
+        />
       )}
     </section>
   )

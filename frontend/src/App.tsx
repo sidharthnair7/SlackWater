@@ -163,7 +163,7 @@ export function App() {
     show(clip, true)
   }
 
-  function pickOwn(file: File) {
+  function pickOwn(file: File, box?: Region) {
     pickedByUser.current = true
     setStarted(true)
     run.current++
@@ -172,7 +172,7 @@ export function App() {
       return { file, url: URL.createObjectURL(file), result: null }
     })
     setSelected('')
-    setRegion(OWN_REGION)
+    setRegion(box ?? OWN_REGION)
     setReadout({ kind: 'own-ready', fileName: file.name, sizeMb: file.size / 1e6 })
     setHint(live ? '' : "This demo page has no engine behind it, so it can't measure uploads. Run SlackWater from the GitHub repo (one command) to measure your own clip.")
   }

@@ -344,6 +344,7 @@ export function Landing({ real, live, onOpen, onMeasure }: Props) {
               <li>River speed. It measures the surface, which flows faster than the average.</li>
               <li>Metres per second without a scale in the frame.</li>
               <li>Mosquitoes, larvae or disease. It says still or moving; crews decide where to look.</li>
+              <li>That the box holds water. It measures motion in the box, so it's for clips filmed at a stream.</li>
             </ul>
           </Reveal>
           <Reveal delay={0.1}>

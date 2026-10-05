@@ -17,6 +17,8 @@ Every reading carries a fingerprint, exports as **FHIR R4**, and is anchored on 
 ![OriginTrail DKG](https://img.shields.io/badge/OriginTrail-DKG_on_Base_Sepolia-20807c?style=flat-square)
 ![Tests](https://img.shields.io/badge/tests-34_passing-2f7a55?style=flat-square)
 
+**[Try it live →](https://slack-water-green.vercel.app/)** (the engine runs on AWS, so you can measure your own clip; if it's ever down, the page falls back to the saved readings)
+
 [The problem](#the-problem) · [Results](#results-on-real-footage) · [3D](#every-point-it-followed-in-3d) · [How it decides](#how-it-decides) · [Refusing is a result](#refusing-is-a-result) · [Knowledge graph](#a-record-anyone-can-check) · [Run it](#run-it)
 
 </div>
@@ -238,6 +240,7 @@ docker build -t slackwater . && docker run --rm -p 8080:8080 slackwater
 - **River speed.** It measures the surface, which flows faster than the average.
 - **Metres per second without a scale** in the frame.
 - **Mosquitoes, larvae or disease.** It says still or moving; crews decide where to look.
+- **That the box holds water.** It measures motion inside the box, so point it at a stream; it can't tell water from a face or a car.
 
 ## What’s next
 
